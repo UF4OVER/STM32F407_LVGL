@@ -1,3 +1,15 @@
+// -------------------------------
+// Created by 33974 on 2024/12/27.
+//  @Project : STM32F4_4SPI
+//  @Time    : 2024 - 12-27 00:10
+//  @FileName:
+//  @Software: Clion 2024
+//  @System  : Windows 11 23H2
+//  @Author  : 33974
+//  @Contact : ${EMAIL}
+// -------------------------------
+
+
 #include "ST7796.h"
 
 ST7796S_LcdSetting LcdSetting;

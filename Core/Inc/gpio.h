@@ -1,22 +1,14 @@
-/* USER CODE BEGIN Header */
-/**
-  ******************************************************************************
-  * @file    gpio.h
-  * @brief   This file contains all the function prototypes for
-  *          the gpio.c file
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2024 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
-/* USER CODE END Header */
+// -------------------------------
+// Created by 33974 on 2024/12/27.
+//  @Project : STM32F4_4SPI
+//  @Time    : 2024 - 12-27 00:10
+//  @FileName: qw.py
+//  @Software: Clion 2024
+//  @System  : Windows 11 23H2
+//  @Author  : 33974
+//  @Contact : ${EMAIL}
+// -------------------------------
+
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __GPIO_H__
 #define __GPIO_H__

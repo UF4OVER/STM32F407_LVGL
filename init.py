@@ -30,7 +30,7 @@ def main():
         os.makedirs("GUI/src", exist_ok=True)
         os.makedirs("GUI/examples", exist_ok=True)
         # 将D:\lvgl\src文件夹复制到GUI/src文件夹中
-        src_dir = r"D:\lvgl\src"
+        src_dir = r"D:\lvgl\src"  # LVGL源目录
         dest_dir = r"GUI\src"
         for root, dirs, files in os.walk(src_dir):
             for file in files:
