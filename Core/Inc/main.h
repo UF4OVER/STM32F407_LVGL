@@ -71,21 +71,19 @@ void Error_Handler(void);
 #define TFT_CS_GPIO_Port GPIOC
 #define LED_Pin GPIO_PIN_15
 #define LED_GPIO_Port GPIOD
-
 #define FT_RST_Pin GPIO_PIN_4
 #define FT GPIOB
-
 #define FT_INT_Pin GPIO_PIN_5
 #define FT GPIOB
-
 #define FT_INT_EXTI_IRQn EXTI9_5_IRQn
-
 #define FT_SCL_Pin GPIO_PIN_6
 #define FT GPIOB
-
 #define FT_SDA_Pin GPIO_PIN_7
 #define FT GPIOB
 
+/* USER CODE BEGIN Private defines */
+
+/* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }

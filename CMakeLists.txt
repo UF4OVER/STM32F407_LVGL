@@ -55,11 +55,12 @@ include_directories(Core/Inc
         Drivers/CMSIS/Device/ST/STM32F4xx/Include
         Drivers/CMSIS/Include
         GUI
-        GUI/src
         GUI/examples
+        GUI/src
         GUI/examples/porting
-        USER/ST7796
         USER/TOUCH
+        USER/ST7796
+
 )
 
 add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx)

@@ -184,8 +184,7 @@ all interrupt callbacks are set to the corresponding weak functions:
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal.h"
-#include "lv_conf.h"
-#include "hal/lv_hal_tick.h"
+
 /** @addtogroup STM32F4xx_HAL_Driver
   * @{
   */
@@ -5655,23 +5654,16 @@ uint32_t HAL_TIM_ReadCapturedValue(const TIM_HandleTypeDef *htim, uint32_t Chann
   * @param  htim TIM handle
   * @retval None
   */
-//__weak void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-//{
-//  /* Prevent unused argument(s) compilation warning */
-//  UNUSED(htim);
-//
-//  /* NOTE : This function should not be modified, when the callback is needed,
-//            the HAL_TIM_PeriodElapsedCallback could be implemented in the user file
-//   */
-//}
+__weak void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* Prevent unused argument(s) compilation warning */
+  UNUSED(htim);
 
-
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
-    if (htim->Instance == TIM6)
-        {
-        lv_tick_inc(1);
-        }
+  /* NOTE : This function should not be modified, when the callback is needed,
+            the HAL_TIM_PeriodElapsedCallback could be implemented in the user file
+   */
 }
+
 /**
   * @brief  Period elapsed half complete callback in non-blocking mode
   * @param  htim TIM handle

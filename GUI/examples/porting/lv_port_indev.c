@@ -4,6 +4,8 @@
  */
 
 /*Copy this file as "lv_port_indev.c" and set this value to "1" to enable content*/
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wpointer-sign"
 #if 1
 
 /*********************
@@ -11,7 +13,7 @@
  *********************/
 #include "lv_port_indev.h"
 #include "../../lvgl.h"
-
+#include "FT6336.h"
 /*********************
  *      DEFINES
  *********************/
@@ -182,7 +184,7 @@ void lv_port_indev_init(void)
 /*Initialize your touchpad*/
 static void touchpad_init(void)
 {
-    /*Your code comes here*/
+   FT6X36_Init();
 }
 
 /*Will be called by the library to read the touchpad*/
@@ -200,26 +202,25 @@ static void touchpad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
         data->state = LV_INDEV_STATE_REL;
     }
 
-    /*Set the last pressed coordinates*/
+    /*设置上次按下的坐标*/
     data->point.x = last_x;
     data->point.y = last_y;
 }
 
-/*Return true is the touchpad is pressed*/
+/*返回 true 表示按下触摸板*/
 static bool touchpad_is_pressed(void)
 {
     /*Your code comes here*/
 
-    return false;
+    return true;
 }
 
 /*如果按下触摸板，则获取 x 和 y 坐标*/
 static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 {
     /*Your code comes here*/
+    GetTouchPoint(x, y);
 
-    (*x) = 0;
-    (*y) = 0;
 }
 
 /*------------------
@@ -412,3 +413,5 @@ static bool button_is_pressed(uint8_t id)
 /*This dummy typedef exists purely to silence -Wpedantic.*/
 typedef int keep_pedantic_happy;
 #endif
+
+#pragma clang diagnostic pop

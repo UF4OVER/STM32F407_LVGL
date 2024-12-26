@@ -18,61 +18,74 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "i2c.h"
 #include "spi.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-//#include "lvgl.h"
 #include "ST7796.h"
 #include "FT6336.h"
-#include "i2c.h"
-
+//#include "lvgl.h"
 //#include "lv_port_disp.h"
-//#include "lv_examples.h"
-
-/* Private includes ----------------------------------------------------------*/
-/* USER CODE BEGIN Includes */
+//#include "lv_conf.h"
 
 #pragma clang diagnostic push
 #pragma ide diagnostic ignored "EndlessLoop"
-/* USER CODE END Includes */
 
 
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin)
+{ // 触摸中断回调函数
+    if (GPIO_Pin == FT_INT_Pin){
+        LCD_DrawString(0, 1, "step_1!",0XFFFF);
+        ReadTouchData();
+    }
+
+
+
+}
 void SystemClock_Config(void);
 
-volatile uint8_t touchDetected = 0;
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-    if (GPIO_Pin == FT_INT_Pin) {
 
-        LCD_DrawString(2, 0, "touch detected", LCD_RED);
-    }
-}
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
 
-  HAL_Init();
+    HAL_Init();
 
-  SystemClock_Config();
+    SystemClock_Config();
 
-  MX_GPIO_Init();
-  MX_I2C1_Init();
-  MX_SPI1_Init();
-  MX_SPI2_Init();
-  MX_USART2_UART_Init();
 
-//  MX_TIM6_Init();
-//  HAL_TIM_Base_Start_IT(&htim6);
-ST7796S_LcdInit();
-LCD_DrawString(1,1, "hello world", LCD_RED);
-//  lv_init();
-//  lv_port_disp_init();
-  while (1)
-  {
-      ReadTouchData();    // 在主循环中读取数据
+    MX_GPIO_Init();
+    MX_I2C1_Init();
+    MX_SPI1_Init();
+//    MX_SPI2_Init();
+//    MX_USART2_UART_Init();
+//    MX_TIM6_Init();
+// 设置 EXTI9_5_IRQn 的优先级（较低）
+    HAL_NVIC_SetPriority(EXTI9_5_IRQn, 2, 0);
+    HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
-//      lv_task_handler();
+// 设置 I2C 的事件和错误中断优先级（较高）
+    HAL_NVIC_SetPriority(I2C1_EV_IRQn, 1, 0);
+    HAL_NVIC_EnableIRQ(I2C1_EV_IRQn);
 
-  }
+    HAL_NVIC_SetPriority(I2C1_ER_IRQn, 1, 1);
+    HAL_NVIC_EnableIRQ(I2C1_ER_IRQn);
+
+
+
+    ST7796S_LcdInit();
+    HAL_Delay(100);
+    FT6X36_Init();
+
+    while (1)
+    {
+
+    }
+    /* USER CODE END 3 */
 }
 
 /**
@@ -156,5 +169,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-#pragma clang diagnostic pop
