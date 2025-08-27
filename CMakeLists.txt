@@ -60,6 +60,7 @@ include_directories(Core/Inc
         GUI/examples/porting
         USER/ST7796
         USER/TOUCH
+        USER/FT6336
 )
 
 add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx)

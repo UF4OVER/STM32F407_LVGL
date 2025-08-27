@@ -1,4 +1,5 @@
 #include "ST7796.h"
+#include "FONT.h"
 
 ST7796S_LcdSetting LcdSetting;
 
@@ -77,7 +78,6 @@ void ST7796S_LcdDirection(uint8_t direction) {
     }
 }
 
-
 /*准备写入GRAM*/
 void LCD_WriteRAM_Prepare(void) {
     ST7796S_LcdWriteCommand(LcdSetting.wramcmd);
@@ -128,7 +128,7 @@ void LCD_Clear(uint16_t Color) {
 
 
 void ST7796S_LcdInit(void) {
-
+    LCD_LED_ON;
     ST7796S_LcdReset();
     ST7796S_LcdWriteCommand(0xF0);
     ST7796S_LcdWriteData(0xC3);
@@ -299,4 +299,22 @@ uint32_t LCD_DrawString(uint16_t x, uint16_t y, char *pt, int16_t textColor) {
 
 void LCD_InvertColors(int invert) {
     ST7796S_LcdWriteCommand(invert ? LCD_INVON : LCD_INVOFF);
+}
+void LCD_DrawCircle(uint16_t x0, uint16_t y0, uint8_t r) {
+    // 实现Bresenham画圆算法
+    int x = -r, y = 0, err = 2-2*r;
+    do {
+        LCD_DrawPoint(x0 - x, y0 + y);
+        LCD_DrawPoint(x0 - y, y0 - x);
+        LCD_DrawPoint(x0 + x, y0 - y);
+        LCD_DrawPoint(x0 + y, y0 + x);
+        if (err <= 0) {
+            ++y;
+            err += 2*y + 1;
+        }
+        if (err > 0) {
+            ++x;
+            err += 2*x + 1;
+        }
+    } while (x < 0);
 }

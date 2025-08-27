@@ -22,10 +22,16 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
-//#include "lvgl.h"
+#include "i2c.h"
+
+#include "lvgl.h"
+#include "lv_port_disp.h"
+#include "lv_examples.h"
+
 #include "ST7796.h"
 #include "FT6336.h"
-#include "i2c.h"
+#include "TOUCH.h"
+
 
 //#include "lv_port_disp.h"
 //#include "lv_examples.h"
@@ -37,42 +43,64 @@
 #pragma ide diagnostic ignored "EndlessLoop"
 /* USER CODE END Includes */
 
+volatile uint8_t touchNeedDraw = 0;  // 新增全局标志
 
 void SystemClock_Config(void);
 
 volatile uint8_t touchDetected = 0;
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (GPIO_Pin == FT_INT_Pin) {
-
-        LCD_DrawString(2, 0, "touch detected", LCD_RED);
+        touchNeedDraw = 1;  // 设置触摸标志
     }
 }
+
 int main(void)
 {
 
-  HAL_Init();
+    HAL_Init();
 
-  SystemClock_Config();
+    SystemClock_Config();
 
-  MX_GPIO_Init();
-  MX_I2C1_Init();
-  MX_SPI1_Init();
-  MX_SPI2_Init();
-  MX_USART2_UART_Init();
+    MX_GPIO_Init();
+    MX_I2C1_Init();
+    MX_SPI1_Init();
+    MX_SPI2_Init();
+    MX_USART2_UART_Init();
 
-//  MX_TIM6_Init();
-//  HAL_TIM_Base_Start_IT(&htim6);
-ST7796S_LcdInit();
-LCD_DrawString(1,1, "hello world", LCD_RED);
-//  lv_init();
-//  lv_port_disp_init();
-  while (1)
-  {
-      ReadTouchData();    // 在主循环中读取数据
+    MX_TIM6_Init();
+    HAL_TIM_Base_Start_IT(&htim6);
+    ST7796S_LcdInit();
 
-//      lv_task_handler();
+    // 初始化触摸屏
+    if(TP_Init() != 0) {
+        // 初始化失败处理
+        LCD_DrawString(0, 0, "TOUCH INIT FAIL", LCD_RED);
+        while(1);  // 停止程序
+    }
 
-  }
+    // 清屏
+    LCD_Clear(LCD_BLACK);
+
+    while (1)
+    {
+        // 检查触摸标志
+        if(touchNeedDraw) {
+            LCD_DrawString(0, 0, "TOUCH DETECTED", LCD_WHITE);
+            // 扫描触摸点
+            if(FT6336_Scan()) {
+                LCD_DrawString(0, 10, "TOUCH DETECTED", LCD_WHITE);
+                // 绘制所有有效触摸点
+                for(uint8_t i=0; i<CTP_MAX_TOUCH; i++) {
+                    if(tp_dev.sta & (1<<i)) {  // 检查该点是否有效
+                        LCD_DrawString(0, 20, "OK", LCD_WHITE);
+                        // 绘制半径5像素的红色圆点
+                        LCD_DrawPoint(tp_dev.x[i], tp_dev.y[i]);
+                    }
+                }
+            }
+            touchNeedDraw = 0;  // 清除标志
+        }
+    }
 }
 
 /**
