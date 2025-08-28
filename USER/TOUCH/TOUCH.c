@@ -1,5 +1,6 @@
-#include "touch.h"
+#include "TOUCH.h"
 #include "math.h"
+
 
 _m_tp_dev tp_dev = {
         TP_Init,

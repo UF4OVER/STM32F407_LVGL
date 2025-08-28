@@ -168,25 +168,24 @@ void disp_disable_update(void)
  * */
 static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p)
 {
-    if(disp_flush_enabled) {
-        /*最简单的情况（也是最慢的）将所有像素逐个放到屏幕上*/
-
-        int16_t x;
-        int16_t y;
-        for(y = area->y1; y <= area->y2; y++) {
-            for(x = area->x1; x <= area->x2; x++) {
-                /*Put a pixel to the display. For example:*/
-                /*put_px(x, y, *color_p)*/
-                LCD_DrawPixel(x, y, color_p->full);
-                color_p++;
-            }
-        }
+    if(!disp_flush_enabled) {
+        lv_disp_flush_ready(disp_drv);
+        return;
     }
 
-    /*IMPORTANT!!!
-     *通知图形库您已准备好进行刷新*/
-    lv_disp_flush_ready(disp_drv);
+    uint16_t x1 = area->x1;
+    uint16_t y1 = area->y1;
+    uint16_t x2 = area->x2;
+    uint16_t y2 = area->y2;
+
+    uint32_t size = (x2 - x1 + 1) * (y2 - y1 + 1);
+
+    LCD_SetAddress(x1, y1, x2, y2);
+    LCD_PushColors((uint16_t *)color_p, size);
+
+    lv_disp_flush_ready(disp_drv); // 通知 LVGL 刷新完成
 }
+
 
 /*OPTIONAL: GPU INTERFACE*/
 

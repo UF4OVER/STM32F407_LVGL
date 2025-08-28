@@ -225,7 +225,7 @@ void LCD_SetCursor(uint16_t Xpos, uint16_t Ypos) {
 
 void LCD_DrawPoint(uint16_t x, uint16_t y) {
     LCD_SetCursor(x, y);//设置光标位置
-    Lcd_WriteData_16Bit(0xFFFF);
+    Lcd_WriteData_16Bit(0xFC23);
 }
 
 void LCD_DrawPixel(uint16_t x, uint16_t y, uint16_t color) {
@@ -300,21 +300,41 @@ uint32_t LCD_DrawString(uint16_t x, uint16_t y, char *pt, int16_t textColor) {
 void LCD_InvertColors(int invert) {
     ST7796S_LcdWriteCommand(invert ? LCD_INVON : LCD_INVOFF);
 }
-void LCD_DrawCircle(uint16_t x0, uint16_t y0, uint8_t r) {
-    // 实现Bresenham画圆算法
-    int x = -r, y = 0, err = 2-2*r;
-    do {
-        LCD_DrawPoint(x0 - x, y0 + y);
-        LCD_DrawPoint(x0 - y, y0 - x);
-        LCD_DrawPoint(x0 + x, y0 - y);
-        LCD_DrawPoint(x0 + y, y0 + x);
-        if (err <= 0) {
-            ++y;
-            err += 2*y + 1;
-        }
-        if (err > 0) {
-            ++x;
-            err += 2*x + 1;
-        }
-    } while (x < 0);
+
+/* 设置绘制区域 */
+void LCD_SetAddress(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
+{
+    ST7796S_LcdWriteCommand(LcdSetting.setxcmd);
+    ST7796S_LcdWriteData(x0 >> 8);
+    ST7796S_LcdWriteData(x0 & 0xFF);
+    ST7796S_LcdWriteData(x1 >> 8);
+    ST7796S_LcdWriteData(x1 & 0xFF);
+
+    ST7796S_LcdWriteCommand(LcdSetting.setycmd);
+    ST7796S_LcdWriteData(y0 >> 8);
+    ST7796S_LcdWriteData(y0 & 0xFF);
+    ST7796S_LcdWriteData(y1 >> 8);
+    ST7796S_LcdWriteData(y1 & 0xFF);
+
+    LCD_WriteRAM_Prepare();
 }
+
+/* 批量发送像素数据 */
+// 修改后的批量发送函数（添加字节交换）
+void LCD_PushColors(uint16_t *color, uint32_t size)
+{
+    LCD_CS_CLR;
+    LCD_DC_SET; // 数据模式
+
+    // 添加字节交换（关键修复）
+    for(uint32_t i = 0; i < size; i++) {
+        uint8_t swapped[] = {
+                (color[i] >> 8) & 0xFF,  // 先发送高位字节
+                color[i] & 0xFF           // 后发送低位字节
+        };
+        HAL_SPI_Transmit(&LCD_SPI, swapped, 2, HAL_MAX_DELAY);
+    }
+
+    LCD_CS_SET;
+}
+

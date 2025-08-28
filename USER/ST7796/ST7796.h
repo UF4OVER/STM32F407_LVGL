@@ -49,7 +49,6 @@
 #define LCD_INVOFF  0x20 //颜色反转
 #define LCD_INVON   0x21  //颜色反转
 
-
 typedef struct {
     uint16_t width;        //液晶屏的宽度
     uint16_t height;    //液晶屏的高度
@@ -84,7 +83,9 @@ uint32_t LCD_DrawString(uint16_t x, uint16_t y, char *pt, int16_t textColor);
 
 void LCD_InvertColors(int invert);
 
-void LCD_DrawCircle(uint16_t x0, uint16_t y0, uint8_t r);
+void LCD_SetAddress(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
+
+void LCD_PushColors(uint16_t *color, uint32_t size);
 
 
 #endif //STM32F4_4SPI_ST7796_H

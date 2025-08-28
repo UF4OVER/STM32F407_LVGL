@@ -11,6 +11,9 @@
  *********************/
 #include "lv_port_indev.h"
 #include "../../lvgl.h"
+#include "touch.h"
+#include "ST7796.h"
+#include "main.h"
 
 /*********************
  *      DEFINES
@@ -101,31 +104,31 @@ void lv_port_indev_init(void)
      * -----------------*/
 
     /*Initialize your mouse if you have*/
-    mouse_init();
-
-    /*Register a mouse input device*/
-    lv_indev_drv_init(&indev_drv);
-    indev_drv.type = LV_INDEV_TYPE_POINTER;
-    indev_drv.read_cb = mouse_read;
-    indev_mouse = lv_indev_drv_register(&indev_drv);
-
-    /*Set cursor. For simplicity set a HOME symbol now.*/
-    lv_obj_t * mouse_cursor = lv_img_create(lv_scr_act());
-    lv_img_set_src(mouse_cursor, LV_SYMBOL_HOME);
-    lv_indev_set_cursor(indev_mouse, mouse_cursor);
+//    mouse_init();
+//
+//    /*Register a mouse input device*/
+//    lv_indev_drv_init(&indev_drv);
+//    indev_drv.type = LV_INDEV_TYPE_POINTER;
+//    indev_drv.read_cb = mouse_read;
+//    indev_mouse = lv_indev_drv_register(&indev_drv);
+//
+//    /*Set cursor. For simplicity set a HOME symbol now.*/
+//    lv_obj_t * mouse_cursor = lv_img_create(lv_scr_act());
+//    lv_img_set_src(mouse_cursor, LV_SYMBOL_HOME);
+//    lv_indev_set_cursor(indev_mouse, mouse_cursor);
 
     /*------------------
      * Keypad
      * -----------------*/
 
     /*Initialize your keypad or keyboard if you have*/
-    keypad_init();
+//    keypad_init();
 
     /*Register a keypad input device*/
-    lv_indev_drv_init(&indev_drv);
-    indev_drv.type = LV_INDEV_TYPE_KEYPAD;
-    indev_drv.read_cb = keypad_read;
-    indev_keypad = lv_indev_drv_register(&indev_drv);
+//    lv_indev_drv_init(&indev_drv);
+//    indev_drv.type = LV_INDEV_TYPE_KEYPAD;
+//    indev_drv.read_cb = keypad_read;
+//    indev_keypad = lv_indev_drv_register(&indev_drv);
 
     /*Later you should create group(s) with `lv_group_t * group = lv_group_create()`,
      *add objects to the group with `lv_group_add_obj(group, obj)`
@@ -137,13 +140,13 @@ void lv_port_indev_init(void)
      * -----------------*/
 
     /*Initialize your encoder if you have*/
-    encoder_init();
-
-    /*Register a encoder input device*/
-    lv_indev_drv_init(&indev_drv);
-    indev_drv.type = LV_INDEV_TYPE_ENCODER;
-    indev_drv.read_cb = encoder_read;
-    indev_encoder = lv_indev_drv_register(&indev_drv);
+//    encoder_init();
+//
+//    /*Register a encoder input device*/
+//    lv_indev_drv_init(&indev_drv);
+//    indev_drv.type = LV_INDEV_TYPE_ENCODER;
+//    indev_drv.read_cb = encoder_read;
+//    indev_encoder = lv_indev_drv_register(&indev_drv);
 
     /*Later you should create group(s) with `lv_group_t * group = lv_group_create()`,
      *add objects to the group with `lv_group_add_obj(group, obj)`
@@ -155,20 +158,20 @@ void lv_port_indev_init(void)
      * -----------------*/
 
     /*Initialize your button if you have*/
-    button_init();
-
-    /*Register a button input device*/
-    lv_indev_drv_init(&indev_drv);
-    indev_drv.type = LV_INDEV_TYPE_BUTTON;
-    indev_drv.read_cb = button_read;
-    indev_button = lv_indev_drv_register(&indev_drv);
-
-    /*Assign buttons to points on the screen*/
-    static const lv_point_t btn_points[2] = {
-        {10, 10},   /*Button 0 -> x:10; y:10*/
-        {40, 100},  /*Button 1 -> x:40; y:100*/
-    };
-    lv_indev_set_button_points(indev_button, btn_points);
+//    button_init();
+//
+//    /*Register a button input device*/
+//    lv_indev_drv_init(&indev_drv);
+//    indev_drv.type = LV_INDEV_TYPE_BUTTON;
+//    indev_drv.read_cb = button_read;
+//    indev_button = lv_indev_drv_register(&indev_drv);
+//
+//    /*Assign buttons to points on the screen*/
+//    static const lv_point_t btn_points[2] = {
+//        {10, 10},   /*Button 0 -> x:10; y:10*/
+//        {40, 100},  /*Button 1 -> x:40; y:100*/
+//    };
+//    lv_indev_set_button_points(indev_button, btn_points);
 }
 
 /**********************
@@ -183,7 +186,9 @@ void lv_port_indev_init(void)
 static void touchpad_init(void)
 {
     /*Your code comes here*/
+   TP_Init();
 }
+
 
 /*Will be called by the library to read the touchpad*/
 static void touchpad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
@@ -191,16 +196,14 @@ static void touchpad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
     static lv_coord_t last_x = 0;
     static lv_coord_t last_y = 0;
 
-    /*保存按下的坐标和状态*/
-    if(touchpad_is_pressed()) {
+    if (touchpad_is_pressed()) {
         touchpad_get_xy(&last_x, &last_y);
-        data->state = LV_INDEV_STATE_PR;
-    }
-    else {
-        data->state = LV_INDEV_STATE_REL;
+        data->state = LV_INDEV_STATE_PR; // 按下
+        TOUCHPRESSED = false;           // 清除中断标志
+    } else {
+        data->state = LV_INDEV_STATE_REL; // 松开
     }
 
-    /*Set the last pressed coordinates*/
     data->point.x = last_x;
     data->point.y = last_y;
 }
@@ -208,19 +211,26 @@ static void touchpad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
 /*Return true is the touchpad is pressed*/
 static bool touchpad_is_pressed(void)
 {
-    /*Your code comes here*/
+    if (!TOUCHPRESSED) return false;  // 没有中断触发就不扫描
 
+    if (FT6336_Scan()) {  // 有中断才去I2C读取
+        if (tp_dev.sta & TP_PRES_DOWN) {
+            return true;  // 有触摸
+        }
+    }
+
+    // 扫描后没有按下，说明触摸松开，清标志
+    TOUCHPRESSED = false;
     return false;
 }
 
 /*如果按下触摸板，则获取 x 和 y 坐标*/
 static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 {
-    /*Your code comes here*/
-
-    (*x) = 0;
-    (*y) = 0;
+    *x = tp_dev.x[0];
+    *y = tp_dev.y[0];
 }
+
 
 /*------------------
  * Mouse

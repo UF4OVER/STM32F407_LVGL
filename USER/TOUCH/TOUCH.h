@@ -1,6 +1,9 @@
 
+#include <stdbool.h>
 #include "FT6336.h"
 #include "stm32f4xx_hal.h"
+
+extern volatile bool TOUCHPRESSED;
 
 #define TP_PRES_DOWN 0x80
 #define TP_CATH_PRES 0x40
