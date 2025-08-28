@@ -38,7 +38,7 @@ void MX_I2C1_Init(void)
 
   /* USER CODE END I2C1_Init 1 */
   hi2c1.Instance = I2C1;
-  hi2c1.Init.ClockSpeed = 100000;
+  hi2c1.Init.ClockSpeed = 400000;
   hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
   hi2c1.Init.OwnAddress1 = 0;
   hi2c1.Init.AddressingMode = I2C_ADDRESSINGMODE_7BIT;
@@ -101,9 +101,9 @@ void HAL_I2C_MspDeInit(I2C_HandleTypeDef* i2cHandle)
     PB6     ------> I2C1_SCL
     PB7     ------> I2C1_SDA
     */
-    HAL_GPIO_DeInit(FT, FT_SCL_Pin);
+    HAL_GPIO_DeInit(FT_SCL_GPIO_Port, FT_SCL_Pin);
 
-    HAL_GPIO_DeInit(FT, FT_SDA_Pin);
+    HAL_GPIO_DeInit(FT_SDA_GPIO_Port, FT_SDA_Pin);
 
   /* USER CODE BEGIN I2C1_MspDeInit 1 */
 

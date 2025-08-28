@@ -17,21 +17,22 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
+#include <stdbool.h>
 #include "main.h"
+#include "dma.h"
+#include "i2c.h"
 #include "spi.h"
 #include "tim.h"
-#include "usart.h"
 #include "gpio.h"
-#include "i2c.h"
-
 #include "lvgl.h"
 #include "lv_port_disp.h"
+#include "lv_port_indev.h"
 #include "lv_examples.h"
 
 #include "ST7796.h"
 #include "FT6336.h"
 #include "TOUCH.h"
-#include "lv_port_indev.h"
+
 
 
 //#include "lv_port_disp.h"
@@ -45,12 +46,32 @@
 
 
 volatile bool TOUCHPRESSED = false;
+volatile lv_disp_drv_t * g_disp_drv = NULL; // 全局保存，用于DMA回调
 
-/* USER CODE END Includes */
+/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     if (GPIO_Pin == FT_INT_Pin) {
         TOUCHPRESSED = true;
+    }
+}
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+    if (htim->Instance == TIM6)
+    {
+        lv_tick_inc(1);
+    };
+    if (htim->Instance == TIM7)
+    {
+        lv_task_handler();
+    }
+}
+void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi){
+    if(hspi->Instance == LCD_SPI.Instance){
+        LCD_CS_SET;
+        if(g_disp_drv){
+            lv_disp_flush_ready(g_disp_drv);
+            g_disp_drv = NULL;
+        }
     }
 }
 
@@ -60,29 +81,30 @@ int main(void)
 
     SystemClock_Config();
 
-    MX_GPIO_Init();
-    MX_I2C1_Init();
-    MX_SPI1_Init();
-    MX_SPI2_Init();
-    MX_USART2_UART_Init();
+  MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_I2C1_Init();
+  MX_SPI1_Init();
+  MX_TIM6_Init();
+  MX_TIM7_Init();
+  HAL_TIM_Base_Start_IT(&htim6);  // 1ms
+  /* Initialize interrupts */
+  MX_NVIC_Init();
+  HAL_TIM_Base_Start_IT(&htim7);
+  /* USER CODE BEGIN 2 */
 
-    MX_TIM6_Init();
-    HAL_TIM_Base_Start_IT(&htim6);
-
+  /* USER CODE END 2 */
     lv_init();
     lv_port_disp_init();
     lv_port_indev_init();
-
-    lv_example_get_started_2();
-
-    while (1)
-    {
-        lv_task_handler();
-        HAL_Delay(5);
-
-
-
-    }
+    lv_example_get_started_3();
+  /* Infinite loop */
+  /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+      HAL_Delay(5);
+  }
+  /* USER CODE END 3 */
 }
 
 /**
@@ -131,6 +153,20 @@ void SystemClock_Config(void)
   }
 }
 
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* EXTI9_5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+  /* TIM6_DAC_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
+}
+
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
@@ -166,5 +202,3 @@ void assert_failed(uint8_t *file, uint32_t line)
   /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
-
-#pragma clang diagnostic pop

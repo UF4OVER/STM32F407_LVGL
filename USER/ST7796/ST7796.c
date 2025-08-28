@@ -1,7 +1,11 @@
 #include "ST7796.h"
 #include "FONT.h"
+#include "spi.h"
 
 ST7796S_LcdSetting LcdSetting;
+extern DMA_HandleTypeDef hdma_spi1_tx;
+
+static SPI_HandleTypeDef *LCD_SPI_PTR = &LCD_SPI; // 全局指针，用于 DMA 回调
 
 void ST7796S_LcdReset() {
     LCD_RST_CLR;
@@ -11,27 +15,35 @@ void ST7796S_LcdReset() {
 }
 
 /*写命令*/
-void ST7796S_LcdWriteCommand(uint8_t command) {
+void ST7796S_LcdWriteCommand(uint8_t cmd){
     LCD_CS_CLR;
     LCD_DC_CLR;
-    HAL_SPI_Transmit(&LCD_SPI, &command, 1, 5);
+    HAL_SPI_Transmit(&LCD_SPI, &cmd, 1, HAL_MAX_DELAY);
     LCD_CS_SET;
 }
-
-/*写数据*/
+// 发送 8 位数据（寄存器数据）
 void ST7796S_LcdWriteData(uint8_t data) {
     LCD_CS_CLR;
     LCD_DC_SET;
-    HAL_SPI_Transmit(&LCD_SPI, &data, 1, 5);
+    HAL_SPI_Transmit(&LCD_SPI, &data, 1, HAL_MAX_DELAY);
+}
+/*写数据*/
+void ST7796S_LcdWriteData16(uint16_t data){
+    LCD_CS_CLR;
+    LCD_DC_SET;
+    HAL_SPI_Transmit(&LCD_SPI, (uint16_t*)&data, 1, HAL_MAX_DELAY);
     LCD_CS_SET;
 }
 
-/*向液晶屏特定寄存器写入数据*/
-void ST7796S_LcdWriteReg(uint8_t registers, uint16_t data) {
-    ST7796S_LcdWriteCommand(registers);
-    ST7796S_LcdWriteData(data);
+// 写单个 8 位寄存器（命令+数据）
+void ST7796S_LcdWriteReg(uint8_t reg, uint8_t data){
+    LCD_CS_CLR;
+    LCD_DC_CLR;   // 命令模式
+    HAL_SPI_Transmit(&LCD_SPI, &reg, 1, HAL_MAX_DELAY);
+    LCD_DC_SET;   // 数据模式
+    HAL_SPI_Transmit(&LCD_SPI, &data, 1, HAL_MAX_DELAY);
+    LCD_CS_SET;
 }
-
 
 /*设置液晶屏的扫描方向
 0代表竖屏，然后依次旋转90度
@@ -84,48 +96,50 @@ void LCD_WriteRAM_Prepare(void) {
 }
 
 /*写16位数据*/
-void Lcd_WriteData_16Bit(uint16_t Data) {
-    uint8_t n_Data1 = Data >> 8;
-    uint8_t n_Data2 = Data & 0x00ff;
-    uint8_t N_Data[2] = {n_Data1, n_Data2};
+void Lcd_WriteData_16Bit(uint16_t data)
+{
     LCD_CS_CLR;
     LCD_DC_SET;
-    HAL_SPI_Transmit(&LCD_SPI, N_Data, sizeof(N_Data), 5);
+    HAL_SPI_Transmit(LCD_SPI_PTR, (uint16_t *)&data, 1, HAL_MAX_DELAY);
     LCD_CS_SET;
 }
 
-/*设置显示窗口*/
-void LCD_SetWindows(uint16_t xStar, uint16_t yStar, uint16_t xEnd, uint16_t yEnd) {
+// 设置显示区域
+void LCD_SetWindows(uint16_t x0,uint16_t y0,uint16_t x1,uint16_t y1){
+    uint8_t buf[4];
+
     ST7796S_LcdWriteCommand(LcdSetting.setxcmd);
+    buf[0] = x0 >> 8; buf[1] = x0 & 0xFF;
+    buf[2] = x1 >> 8; buf[3] = x1 & 0xFF;
+    LCD_CS_CLR; LCD_DC_SET;
+    HAL_SPI_Transmit(&LCD_SPI, buf, 4, HAL_MAX_DELAY);
+    LCD_CS_SET;
 
-    ST7796S_LcdWriteData(xStar >> 8);
-    ST7796S_LcdWriteData(0x00FF & xStar);
-    ST7796S_LcdWriteData(xEnd >> 8);
-    ST7796S_LcdWriteData(0x00FF & xEnd);
     ST7796S_LcdWriteCommand(LcdSetting.setycmd);
-
-    ST7796S_LcdWriteData(yStar >> 8);
-    ST7796S_LcdWriteData(0x00FF & yStar);
-    ST7796S_LcdWriteData(yEnd >> 8);
-    ST7796S_LcdWriteData(0x00FF & yEnd);
+    buf[0] = y0 >> 8; buf[1] = y0 & 0xFF;
+    buf[2] = y1 >> 8; buf[3] = y1 & 0xFF;
+    LCD_CS_CLR; LCD_DC_SET;
+    HAL_SPI_Transmit(&LCD_SPI, buf, 4, HAL_MAX_DELAY);
+    LCD_CS_SET;
 
     LCD_WriteRAM_Prepare();
 }
 
 /*清屏*/
-void LCD_Clear(uint16_t Color) {
-    unsigned int i, m;
-    LCD_SetWindows(0, 0, LcdSetting.width - 1, LcdSetting.height - 1);
-    LCD_CS_CLR;
-    LCD_DC_SET;
-    for (i = 0; i < LcdSetting.height; i++) {
-        for (m = 0; m < LcdSetting.width; m++) {
-            Lcd_WriteData_16Bit(Color);
-        }
-    }
-    LCD_CS_SET;
-}
+void LCD_Clear(uint16_t color){
+    LCD_SetWindows(0,0,LcdSetting.width-1,LcdSetting.height-1);
 
+    static uint16_t buf[128];
+    for(int i=0;i<128;i++) buf[i] = color;
+
+    uint32_t total = LcdSetting.width * LcdSetting.height;
+    while(total){
+        uint32_t n = total>128 ? 128 : total;
+        LCD_PushColors_DMA(buf,n);
+        while(HAL_SPI_GetState(&LCD_SPI)!=HAL_SPI_STATE_READY);
+        total -= n;
+    }
+}
 
 void ST7796S_LcdInit(void) {
     LCD_LED_ON;
@@ -218,7 +232,6 @@ void ST7796S_LcdInit(void) {
     LCD_Clear(0x0000);  //清屏为黑色
 }
 
-
 void LCD_SetCursor(uint16_t Xpos, uint16_t Ypos) {
     LCD_SetWindows(Xpos, Ypos, Xpos, Ypos);
 }
@@ -228,60 +241,29 @@ void LCD_DrawPoint(uint16_t x, uint16_t y) {
     Lcd_WriteData_16Bit(0xFC23);
 }
 
-void LCD_DrawPixel(uint16_t x, uint16_t y, uint16_t color) {
-    LCD_SetCursor(x, y);//设置光标位置
-    Lcd_WriteData_16Bit(color);
-}
-
-void LCD_FillRectangle(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t color) {
-    // clipping
-    if ((x >= LCD_W) || (y >= LCD_H)) return;
-    if ((x + w - 1) >= LCD_W) w = LCD_W - x;
-    if ((y + h - 1) >= LCD_H) h = LCD_H - y;
-    LCD_SetWindows(x, y, x + w - 1, y + h - 1);
-    LCD_CS_CLR;
-    LCD_DC_SET;
-    for (y = h; y > 0; y--) {
-        for (x = w; x > 0; x--) {
-            Lcd_WriteData_16Bit(color);
-        }
-    }
-    LCD_CS_SET;
+void LCD_DrawPixel(uint16_t x,uint16_t y,uint16_t color){
+    LCD_SetWindows(x,y,x,y);
+    LCD_PushColors_DMA(&color,1);
 }
 
 void LCD_DrawCharS(int16_t x, int16_t y, char c, int16_t textColor, int16_t bgColor, uint8_t size) {
-    uint8_t line;
-    int32_t i, j;
-    if ((x >= LCD_W) ||
-        (y >= LCD_H) ||
-        ((x + 5 * size - 1) < 0) ||
-        ((y + 8 * size - 1) < 0))
-        return;
+    uint16_t char_buf[5*8*size*size]; // 最多放大 size*size 的像素
+    int idx = 0;
 
-    for (i = 0; i < 6; i++) {
-        if (i == 5)
-            line = 0x0;
-        else
-            line = Font[(c * 5) + i];
-        for (j = 0; j < 8; j++) {
-            if (line & 0x1) {
-                if (size == 1)
-                    LCD_DrawPixel(x + i, y + j, textColor);
-                else {
-                    LCD_FillRectangle(x + (i * size), y + (j * size), size, size, textColor);
-                }
-            } else if (bgColor != textColor) {
-                if (size == 1) // default size
-                    LCD_DrawPixel(x + i, y + j, bgColor);
-                else {  // big size
-                    LCD_FillRectangle(x + i * size, y + j * size, size, size, bgColor);
-                }
-            }
+    for(int i=0; i<6; i++) {
+        uint8_t line = (i==5)?0x0:Font[(c*5)+i];
+        for(int j=0; j<8; j++) {
+            uint16_t color = (line & 0x1) ? textColor : bgColor;
+            for(int dx=0; dx<size; dx++)
+                for(int dy=0; dy<size; dy++)
+                    char_buf[idx++] = color;
             line >>= 1;
         }
     }
+    LCD_SetWindows(x, y, x + 5*size - 1, y + 8*size - 1);
+    LCD_PushColors_DMA(char_buf, idx);
+    while(HAL_SPI_GetState(&LCD_SPI) != HAL_SPI_STATE_READY);
 }
-
 
 uint32_t LCD_DrawString(uint16_t x, uint16_t y, char *pt, int16_t textColor) {
 //
@@ -300,7 +282,6 @@ uint32_t LCD_DrawString(uint16_t x, uint16_t y, char *pt, int16_t textColor) {
 void LCD_InvertColors(int invert) {
     ST7796S_LcdWriteCommand(invert ? LCD_INVON : LCD_INVOFF);
 }
-
 /* 设置绘制区域 */
 void LCD_SetAddress(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
 {
@@ -318,23 +299,17 @@ void LCD_SetAddress(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
 
     LCD_WriteRAM_Prepare();
 }
-
-/* 批量发送像素数据 */
-// 修改后的批量发送函数（添加字节交换）
 void LCD_PushColors(uint16_t *color, uint32_t size)
 {
     LCD_CS_CLR;
-    LCD_DC_SET; // 数据模式
-
-    // 添加字节交换（关键修复）
-    for(uint32_t i = 0; i < size; i++) {
-        uint8_t swapped[] = {
-                (color[i] >> 8) & 0xFF,  // 先发送高位字节
-                color[i] & 0xFF           // 后发送低位字节
-        };
-        HAL_SPI_Transmit(&LCD_SPI, swapped, 2, HAL_MAX_DELAY);
-    }
-
+    LCD_DC_SET;
+    HAL_SPI_Transmit(LCD_SPI_PTR, color, size, HAL_MAX_DELAY);
     LCD_CS_SET;
+}
+// DMA 批量发送 GRAM 数据
+void LCD_PushColors_DMA(uint16_t *color, uint32_t size){
+    LCD_CS_CLR;
+    LCD_DC_SET;
+    HAL_SPI_Transmit_DMA(&LCD_SPI, color, size); // size 单位：16bit 元素
 }
 
