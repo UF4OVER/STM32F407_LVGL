@@ -97,14 +97,15 @@ int main(void)
     lv_init();
     lv_port_disp_init();
     lv_port_indev_init();
-    lv_example_get_started_3();
-  /* Infinite loop */
-  /* USER CODE BEGIN WHILE */
-  while (1)
-  {
-      HAL_Delay(5);
-  }
-  /* USER CODE END 3 */
+    lv_example_win_1();
+
+    while (1)
+    {
+        lv_task_handler();
+        HAL_Delay(5);
+
+    }
+
 }
 
 /**
