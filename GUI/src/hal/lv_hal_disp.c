@@ -139,11 +139,11 @@ void lv_disp_drv_init(lv_disp_drv_t * driver)
  *             Always has to specified and can't be NULL.
  *             Can be an array allocated by the user. E.g. `static lv_color_t disp_buf1[1024 * 10]`
  *             Or a memory address e.g. in external SRAM
- * @param buf2 Optionally specify a second buffer to make image rendering and image flushing
- *             (sending to the display) parallel.
- *             In the `disp_drv->flush` you should use DMA or similar hardware to send
- *             the image to the display in the background.
- *             It lets LVGL to render next frame into the other buffer while previous is being
+ * @param buf2 （可选）指定第二个缓冲区以进行图像呈现和图像刷新
+ *（发送到显示器）并行。
+ * 在“disp_drv->flush”中，您应该使用 DMA 或类似硬件发送
+ * 图像显示在背景中。
+ * 它允许 LVGL 在上一帧渲染到另一个缓冲区中
  * sent. Set to `NULL` if unused.
  * @param size_in_px_cnt size of the `buf1` and `buf2` in pixel count.
  */

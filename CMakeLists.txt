@@ -49,7 +49,8 @@ else ()
     add_compile_options(-Og -g)
 endif ()
 
-include_directories(Core/Inc
+include_directories(
+        Core/Inc
         Drivers/STM32F4xx_HAL_Driver/Inc
         Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
         Drivers/CMSIS/Device/ST/STM32F4xx/Include

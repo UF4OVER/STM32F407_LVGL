@@ -9,6 +9,8 @@
 
 #include "main.h"
 #include "spi.h"
+#include "hal/lv_hal.h"
+
 
 #define LCD_CS_PORT TFT_CS_GPIO_Port
 #define LCD_CS_PIN TFT_CS_Pin
@@ -30,7 +32,7 @@
 #define LCD_LED_OFF HAL_GPIO_WritePin(TFT_LED_GPIO_Port,TFT_LED_Pin,GPIO_PIN_RESET)
 
 #define LCD_SPI hspi1 //SPI定义
-
+#define LCD_SPI_DMA hdma_spi1_tx
 #define LCD_W 320 //宽度
 #define LCD_H 480 //高度
 #define LCD_DIRECTION 2 //方向
@@ -64,6 +66,9 @@ typedef struct {
 
 extern ST7796S_LcdSetting LcdSetting;
 
+extern volatile lv_disp_drv_t *g_disp_drv; // 保持与main.c一致
+
+
 void ST7796S_LcdDirection(uint8_t direction);
 
 void ST7796S_LcdInit(void);
@@ -81,11 +86,15 @@ void LCD_DrawCharS(int16_t x, int16_t y, char c, int16_t textColor, int16_t bgCo
 
 uint32_t LCD_DrawString(uint16_t x, uint16_t y, char *pt, int16_t textColor);
 
+void LCD_SetWindows(uint16_t x0,uint16_t y0,uint16_t x1,uint16_t y1);
+
 void LCD_InvertColors(int invert);
 
 void LCD_SetAddress(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
 
 void LCD_PushColors(uint16_t *color, uint32_t size);
+
+void LCD_PushColors_DMA(uint16_t *color, uint32_t size);
 
 
 #endif //STM32F4_4SPI_ST7796_H
