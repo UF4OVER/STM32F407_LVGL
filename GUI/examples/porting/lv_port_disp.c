@@ -12,6 +12,7 @@
 #include "lv_port_disp.h"
 #include <stdbool.h>
 #include "ST7796.h"
+#include "PRINT.h"
 /*********************
  *      DEFINES
  *********************/
@@ -95,14 +96,14 @@ void lv_port_disp_init(void)
     static lv_disp_draw_buf_t draw_buf_dsc_2;
     static lv_color_t buf_2_1[MY_DISP_HOR_RES * 10];                        /*A buffer for 10 rows*/
     static lv_color_t buf_2_2[MY_DISP_HOR_RES * 10];                        /*An other buffer for 10 rows*/
-    lv_disp_draw_buf_init(&draw_buf_dsc_2, buf_2_1, buf_2_2, MY_DISP_HOR_RES * 10);   /*初始化显示缓冲区*/
+    lv_disp_draw_buf_init(&draw_buf_dsc_2, buf_2_1, buf_2_2, MY_DISP_HOR_RES * 10);   /*Initialize the display buffer*/
 
 //    /* Example for 3) also set disp_drv.full_refresh = 1 below*/
 //    static lv_disp_draw_buf_t draw_buf_dsc_3;
-//    static lv_color_t buf_3_1[MY_DISP_HOR_RES * MY_DISP_VER_RES];            /*屏幕大小的缓冲区*/
-//    static lv_color_t buf_3_2[MY_DISP_HOR_RES * MY_DISP_VER_RES];            /*另一个屏幕大小的缓冲区*/
+//    static lv_color_t buf_3_1[MY_DISP_HOR_RES * MY_DISP_VER_RES];            /*A screen sized buffer*/
+//    static lv_color_t buf_3_2[MY_DISP_HOR_RES * MY_DISP_VER_RES];            /*Another screen sized buffer*/
 //    lv_disp_draw_buf_init(&draw_buf_dsc_3, buf_3_1, buf_3_2,
-//                          MY_DISP_VER_RES * LV_VER_RES_MAX);   /*初始化显示缓冲区*/
+//                          MY_DISP_VER_RES * LV_VER_RES_MAX);   /*Initialize the display buffer*/
 
     /*-----------------------------------
      * Register the display in LVGL
@@ -148,7 +149,6 @@ static void disp_init(void)
 
 volatile bool disp_flush_enabled = true;
 
-
 /* 当 LVGL 调用 disp_flush（） 时启用更新屏幕（刷新过程）
  */
 void disp_enable_update(void)
@@ -163,20 +163,29 @@ void disp_disable_update(void)
     disp_flush_enabled = false;
 }
 
+/*将内部缓冲区的内容刷新到显示屏上的特定区域
+ *您可以使用 DMA 或任何硬件加速在后台执行此操作，但
+ *完成后必须调用 lv_disp_flush_ready（）
+ * */
+static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p)
+{   Print_Printf("进入刷屏函数\n");
+    if(!disp_flush_enabled) {
+        lv_disp_flush_ready(disp_drv);
+        return;
+    }
 
-static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p){
     uint16_t x1 = area->x1;
     uint16_t y1 = area->y1;
     uint16_t x2 = area->x2;
     uint16_t y2 = area->y2;
 
-    uint32_t size = (x2-x1+1)*(y2-y1+1);
-    LCD_SetAddress(x1,y1,x2,y2);
+    uint32_t size = (x2 - x1 + 1) * (y2 - y1 + 1);
 
-    g_disp_drv = disp_drv;
-    LCD_PushColors_DMA((uint16_t*)color_p, size);
+    LCD_SetAddress(x1, y1, x2, y2);
+    Print_Printf("进入刷屏 %d %d %d %d\n", x1, y1, x2, y2);
+    LCD_PushColors_DMA(disp_drv, (uint16_t*)color_p, size);
+    Print_Printf("刷屏完成\n");
 }
-
 
 /*OPTIONAL: GPU INTERFACE*/
 

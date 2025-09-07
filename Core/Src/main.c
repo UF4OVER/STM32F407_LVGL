@@ -24,14 +24,17 @@
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
+#include "i2c.h"
+#include "PRINT.h"
 #include "lvgl.h"
 #include "lv_port_disp.h"
-#include "lv_port_indev.h"
 #include "lv_examples.h"
 
 #include "ST7796.h"
 #include "FT6336.h"
 #include "TOUCH.h"
+#include "lv_port_indev.h"
+#include "lv_demo_benchmark.h"
 
 
 
@@ -46,66 +49,90 @@
 
 
 volatile bool TOUCHPRESSED = false;
-volatile lv_disp_drv_t * g_disp_drv = NULL; // 全局保存，用于DMA回调
+
+/* USER CODE END Includes */
+
+/* Private typedef -----------------------------------------------------------*/
+/* USER CODE BEGIN PTD */
+
+/* USER CODE END PTD */
+
+/* Private define ------------------------------------------------------------*/
+/* USER CODE BEGIN PD */
+
+/* USER CODE END PD */
+
+/* Private macro -------------------------------------------------------------*/
+/* USER CODE BEGIN PM */
+
+/* USER CODE END PM */
+
+/* Private variables ---------------------------------------------------------*/
+
+/* USER CODE BEGIN PV */
+
+/* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
-    if (GPIO_Pin == FT_INT_Pin) {
+/* USER CODE BEGIN PFP */
+/* USER CODE END PFP */
+void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {  // 触摸中断
+    if (GPIO_Pin == T_INT_Pin) {
         TOUCHPRESSED = true;
     }
 }
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){
+/* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){  // LVGL心跳与刷新
     if (htim->Instance == TIM6)
     {
         lv_tick_inc(1);
-    };
+    }
     if (htim->Instance == TIM7)
     {
         lv_task_handler();
     }
 }
-void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi){
-    if(hspi->Instance == LCD_SPI.Instance){
-        LCD_CS_SET;
-        if(g_disp_drv){
-            lv_disp_flush_ready(g_disp_drv);
-            g_disp_drv = NULL;
-        }
-    }
-}
 
+/* USER CODE END 0 */
+
+/**
+  * @brief  The application entry point.
+  * @retval int
+  */
 int main(void)
 {
-    HAL_Init();
+  HAL_Init();
+  SystemClock_Config();
 
-    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_I2C1_Init();
 
-  MX_GPIO_Init();
-  MX_DMA_Init();
-  MX_I2C1_Init();
-  MX_SPI1_Init();
-  MX_TIM6_Init();
-  MX_TIM7_Init();
-  HAL_TIM_Base_Start_IT(&htim6);  // 1ms
-  /* Initialize interrupts */
-  MX_NVIC_Init();
-  HAL_TIM_Base_Start_IT(&htim7);
-  /* USER CODE BEGIN 2 */
+    MX_DMA_Init();
 
-  /* USER CODE END 2 */
+    MX_SPI1_Init();
+
+    Print_Init(115200);
+    Print_Printf("Init Chip \r\n");
+
+    MX_TIM6_Init();
+    HAL_TIM_Base_Start_IT(&htim6);  // 开启TIM6中断
+    Print_Printf("Init TIM6 \r\n");
+    MX_TIM7_Init();
+    HAL_TIM_Base_Start_IT(&htim7);
+    Print_Printf("Init TIM7 \r\n");
+//    ST7796S_LcdInit();
     lv_init();
     lv_port_disp_init();
     lv_port_indev_init();
-    lv_example_win_1();
+    Print_Printf("Init LVGL  \r\n");
+    lv_demo_benchmark();
 
     while (1)
     {
-        lv_task_handler();
         HAL_Delay(5);
-
     }
-
 }
 
 /**
@@ -152,20 +179,6 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
-}
-
-/**
-  * @brief NVIC Configuration.
-  * @retval None
-  */
-static void MX_NVIC_Init(void)
-{
-  /* EXTI9_5_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
-  /* TIM6_DAC_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
-  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
 }
 
 /* USER CODE BEGIN 4 */

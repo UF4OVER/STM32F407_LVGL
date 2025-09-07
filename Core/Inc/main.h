@@ -51,7 +51,7 @@ extern "C" {
 
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
-static void MX_NVIC_Init(void);
+
 /* USER CODE BEGIN EFP */
 
 /* USER CODE END EFP */
@@ -69,16 +69,15 @@ static void MX_NVIC_Init(void);
 #define TFT_RST_GPIO_Port GPIOC
 #define TFT_CS_Pin GPIO_PIN_5
 #define TFT_CS_GPIO_Port GPIOC
-
-#define FT_RST_Pin GPIO_PIN_4
-#define FT_RST_GPIO_Port GPIOB
-#define FT_INT_Pin GPIO_PIN_5
-#define FT_INT_GPIO_Port GPIOB
-#define FT_INT_EXTI_IRQn EXTI9_5_IRQn
-#define FT_SCL_Pin GPIO_PIN_6
-#define FT_SCL_GPIO_Port GPIOB
-#define FT_SDA_Pin GPIO_PIN_7
-#define FT_SDA_GPIO_Port GPIOB
+#define T_RST_Pin GPIO_PIN_4
+#define T_RST_GPIO_Port GPIOB
+#define T_INT_Pin GPIO_PIN_5
+#define T_INT_GPIO_Port GPIOB
+#define T_INT_EXTI_IRQn EXTI9_5_IRQn
+#define T_SCL_Pin GPIO_PIN_6
+#define T_SCL_GPIO_Port GPIOB
+#define T_SDA_Pin GPIO_PIN_7
+#define T_SDA_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 
