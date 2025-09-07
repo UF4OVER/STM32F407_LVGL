@@ -58,10 +58,13 @@ include_directories(
         GUI
         GUI/src
         GUI/examples
+        GUI/demos
+        GUI/demos/benchmark
         GUI/examples/porting
         USER/ST7796
         USER/TOUCH
         USER/FT6336
+        USER/PRINT
 )
 
 add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx)

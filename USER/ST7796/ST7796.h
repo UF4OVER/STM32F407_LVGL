@@ -5,12 +5,9 @@
 #ifndef STM32F4_4SPI_ST7796_H
 #define STM32F4_4SPI_ST7796_H
 
-
-
 #include "main.h"
 #include "spi.h"
 #include "hal/lv_hal.h"
-
 
 #define LCD_CS_PORT TFT_CS_GPIO_Port
 #define LCD_CS_PIN TFT_CS_Pin
@@ -33,6 +30,7 @@
 
 #define LCD_SPI hspi1 //SPI定义
 #define LCD_SPI_DMA hdma_spi1_tx
+
 #define LCD_W 320 //宽度
 #define LCD_H 480 //高度
 #define LCD_DIRECTION 2 //方向
@@ -51,6 +49,14 @@
 #define LCD_INVOFF  0x20 //颜色反转
 #define LCD_INVON   0x21  //颜色反转
 
+#define DMA_CHUNK_PIXELS 32   // 每次DMA发送的像素数
+
+static uint16_t *dma_color_ptr;
+static uint32_t dma_pixels_remaining;
+static lv_disp_drv_t *dma_drv_ptr;
+static uint8_t spi_dma_buf[DMA_CHUNK_PIXELS * 2];
+__attribute__((aligned(4))) static uint8_t spi_dma_buf[DMA_CHUNK_PIXELS * 2];
+
 typedef struct {
     uint16_t width;        //液晶屏的宽度
     uint16_t height;    //液晶屏的高度
@@ -65,9 +71,6 @@ typedef struct {
 } ST7796S_LcdSetting;  //液晶屏的一些重要参数，没注释的代表触摸屏的功能
 
 extern ST7796S_LcdSetting LcdSetting;
-
-extern volatile lv_disp_drv_t *g_disp_drv; // 保持与main.c一致
-
 
 void ST7796S_LcdDirection(uint8_t direction);
 
@@ -86,15 +89,12 @@ void LCD_DrawCharS(int16_t x, int16_t y, char c, int16_t textColor, int16_t bgCo
 
 uint32_t LCD_DrawString(uint16_t x, uint16_t y, char *pt, int16_t textColor);
 
-void LCD_SetWindows(uint16_t x0,uint16_t y0,uint16_t x1,uint16_t y1);
-
 void LCD_InvertColors(int invert);
 
 void LCD_SetAddress(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1);
 
 void LCD_PushColors(uint16_t *color, uint32_t size);
 
-void LCD_PushColors_DMA(uint16_t *color, uint32_t size);
-
+void LCD_PushColors_DMA(lv_disp_drv_t *drv, uint16_t *color, uint32_t size);
 
 #endif //STM32F4_4SPI_ST7796_H

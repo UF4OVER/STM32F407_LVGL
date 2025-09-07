@@ -57,34 +57,38 @@ void MX_GPIO_Init(void)
   HAL_GPIO_WritePin(GPIOC, TFT_RST_Pin|TFT_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(FT_RST_GPIO_Port, FT_RST_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(T_RST_GPIO_Port, T_RST_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : PAPin PAPin */
+  /*Configure GPIO pins : TFT_LED_Pin TFT_DC_Pin */
   GPIO_InitStruct.Pin = TFT_LED_Pin|TFT_DC_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : PCPin PCPin */
+  /*Configure GPIO pins : TFT_RST_Pin TFT_CS_Pin */
   GPIO_InitStruct.Pin = TFT_RST_Pin|TFT_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(GPIOC, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = FT_RST_Pin;
+  /*Configure GPIO pin : T_RST_Pin */
+  GPIO_InitStruct.Pin = T_RST_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(FT_RST_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(T_RST_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : PtPin */
-  GPIO_InitStruct.Pin = FT_INT_Pin;
+  /*Configure GPIO pin : T_INT_Pin */
+  GPIO_InitStruct.Pin = T_INT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_IT_RISING;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
-  HAL_GPIO_Init(FT_INT_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(T_INT_GPIO_Port, &GPIO_InitStruct);
+
+  /* EXTI interrupt init*/
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
 
 }
 

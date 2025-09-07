@@ -4,8 +4,8 @@
 
 #define CTP_MAX_TOUCH 2
 
-#define FT_RST_OFF    				HAL_GPIO_WritePin(GPIOB, FT_RST_Pin, GPIO_PIN_RESET);
-#define FT_RST_ON    				HAL_GPIO_WritePin(GPIOB, FT_RST_Pin, GPIO_PIN_SET);
+#define FT_RST_OFF    				HAL_GPIO_WritePin(T_SCL_GPIO_Port, T_RST_Pin, GPIO_PIN_RESET);
+#define FT_RST_ON    				HAL_GPIO_WritePin(T_SCL_GPIO_Port, T_RST_Pin, GPIO_PIN_SET);
 
 #define FT_INT                  HAL_GPIO_ReadPin(FT, FT_INT_Pin);
 
