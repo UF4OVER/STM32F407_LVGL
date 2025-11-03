@@ -23,8 +23,6 @@
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
-#include <stdio.h>
-#include <string.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
