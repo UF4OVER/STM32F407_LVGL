@@ -17,39 +17,22 @@
   */
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
-#include <stdbool.h>
 #include "main.h"
 #include "dma.h"
 #include "i2c.h"
 #include "spi.h"
 #include "tim.h"
 #include "gpio.h"
-#include "i2c.h"
-#include "PRINT.h"
-#include "lvgl.h"
-#include "lv_port_disp.h"
-#include "lv_examples.h"
-
-#include "ST7796.h"
-#include "FT6336.h"
-#include "TOUCH.h"
-#include "lv_port_indev.h"
-#include "lv_demo_benchmark.h"
-
-
-
-//#include "lv_port_disp.h"
-//#include "lv_examples.h"
+#include <stdio.h>
+#include <string.h>
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
-#pragma clang diagnostic push
-#pragma ide diagnostic ignored "EndlessLoop"
-
-
-volatile bool TOUCHPRESSED = false;
-
+#include "lvgl.h"
+#include "lv_port_disp.h"
+#include "lv_port_indev.h"
+#include "lv_examples.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -75,66 +58,78 @@ volatile bool TOUCHPRESSED = false;
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_NVIC_Init(void);
 /* USER CODE BEGIN PFP */
+
 /* USER CODE END PFP */
-void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {  // 触摸中断
-    if (GPIO_Pin == T_INT_Pin) {
-        TOUCHPRESSED = true;
-    }
-}
+
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim){  // LVGL心跳与刷新
-    if (htim->Instance == TIM6)
-    {
+
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim) {
+    if (htim->Instance == TIM6) {
         lv_tick_inc(1);
     }
-    if (htim->Instance == TIM7)
-    {
-        lv_task_handler();
-    }
 }
-
 /* USER CODE END 0 */
 
 /**
   * @brief  The application entry point.
   * @retval int
   */
-int main(void)
-{
-  HAL_Init();
-  SystemClock_Config();
+int main(void) {
 
+    /* USER CODE BEGIN 1 */
+
+    /* USER CODE END 1 */
+
+    /* MCU Configuration--------------------------------------------------------*/
+
+    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
+    HAL_Init();
+
+    /* USER CODE BEGIN Init */
+
+    /* USER CODE END Init */
+
+    /* Configure the system clock */
+    SystemClock_Config();
+
+    /* USER CODE BEGIN SysInit */
+
+    /* USER CODE END SysInit */
+
+    /* Initialize all configured peripherals */
     MX_GPIO_Init();
-    MX_I2C1_Init();
-
     MX_DMA_Init();
-
+    MX_I2C1_Init();
     MX_SPI1_Init();
-
-    Print_Init(115200);
-    Print_Printf("Init Chip \r\n");
-
     MX_TIM6_Init();
-    HAL_TIM_Base_Start_IT(&htim6);  // 开启TIM6中断
-    Print_Printf("Init TIM6 \r\n");
-    MX_TIM7_Init();
-    HAL_TIM_Base_Start_IT(&htim7);
-    Print_Printf("Init TIM7 \r\n");
-//    ST7796S_LcdInit();
+
+    /* Initialize interrupts */
+    MX_NVIC_Init();
+    /* USER CODE BEGIN 2 */
+    HAL_TIM_Base_Start_IT(&htim6);
     lv_init();
+    HAL_Delay(100);
     lv_port_disp_init();
     lv_port_indev_init();
-    Print_Printf("Init LVGL  \r\n");
-    lv_demo_benchmark();
 
-    while (1)
-    {
-        HAL_Delay(5);
-    }
+    /* USER CODE END 2 */
+
+    /* Infinite loop */
+    /* USER CODE BEGIN WHILE */
+  while (1)
+  {
+    /* USER CODE END WHILE */
+
+    /* USER CODE BEGIN 3 */
+    lv_task_handler();
+    HAL_Delay(5);
+  }
+  /* USER CODE END 3 */
+
 }
-
 /**
   * @brief System Clock Configuration
   * @retval None
@@ -179,6 +174,20 @@ void SystemClock_Config(void)
   {
     Error_Handler();
   }
+}
+
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+  /* EXTI9_5_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(EXTI9_5_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(EXTI9_5_IRQn);
+  /* TIM6_DAC_IRQn interrupt configuration */
+  HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
+  HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
 }
 
 /* USER CODE BEGIN 4 */

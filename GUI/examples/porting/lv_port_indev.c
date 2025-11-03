@@ -10,10 +10,8 @@
  *      INCLUDES
  *********************/
 #include "lv_port_indev.h"
-#include "../../lvgl.h"
-#include "touch.h"
 #include "ST7796.h"
-#include "main.h"
+#include "H_TOUCH.h"
 
 /*********************
  *      DEFINES
@@ -95,10 +93,9 @@ void lv_port_indev_init(void)
 /*Initialize your touchpad*/
 static void touchpad_init(void)
 {
-    /*Your code comes here*/
-   TP_Init();
+    MX_TOUCH_Init();
+    MX_TOUCH_Init_With_Rotation(SCREEN_HORIZONTAL_1);
 }
-
 
 /*Will be called by the library to read the touchpad*/
 static void touchpad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
@@ -106,10 +103,10 @@ static void touchpad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
     static lv_coord_t last_x = 0;
     static lv_coord_t last_y = 0;
 
+    /*Get the current x and y coordinates*/
     if (touchpad_is_pressed()) {
         touchpad_get_xy(&last_x, &last_y);
         data->state = LV_INDEV_STATE_PR; // 按下
-        TOUCHPRESSED = false;           // 清除中断标志
     } else {
         data->state = LV_INDEV_STATE_REL; // 松开
     }
@@ -118,27 +115,20 @@ static void touchpad_read(lv_indev_drv_t * indev_drv, lv_indev_data_t * data)
     data->point.y = last_y;
 }
 
-/*Return true is the touchpad is pressed*/
+
 static bool touchpad_is_pressed(void)
 {
-    if (!TOUCHPRESSED) return false;  // 没有中断触发就不扫描
-
-    if (FT6336_Scan()) {  // 有中断才去I2C读取
-        if (tp_dev.sta & TP_PRES_DOWN) {
-            return true;  // 有触摸
-        }
-    }
-
-    // 扫描后没有按下，说明触摸松开，清标志
-    TOUCHPRESSED = false;
-    return false;
+    uint8_t status = MX_TOUCH_Get_Status();
+    return (status > 0);
 }
 
-/*如果按下触摸板，则获取 x 和 y 坐标*/
+
 static void touchpad_get_xy(lv_coord_t * x, lv_coord_t * y)
 {
-    *x = tp_dev.x[0];
-    *y = tp_dev.y[0];
+    uint16_t mx = 0, my = 0;
+    MX_TOUCH_Get_Position(&mx, &my);
+    *x = (lv_coord_t)mx;
+    *y = (lv_coord_t)my;
 }
 
 

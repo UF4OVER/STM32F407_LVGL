@@ -1,35 +1,31 @@
 /* USER CODE BEGIN Header */
 /**
   ******************************************************************************
-  * @file           : main.h
-  * @brief          : Header for main.c file.
-  *                   This file contains the common defines of the application.
+  * @file           : H_TOUCH.h
+  * @brief          : 
+  * @author         : UF4OVER
+  * @date           : 2025/11/2
   ******************************************************************************
   * @attention
   *
-  * Copyright (c) 2024 STMicroelectronics.
+  * Copyright (c) 2025 UF4.
   * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
   *
   ******************************************************************************
   */
-/* USER CODE END Header */
-
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __MAIN_H
-#define __MAIN_H
+
+#ifndef STM32F4_4SPI_H_TOUCH_H
+#define STM32F4_4SPI_H_TOUCH_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
+#include "stdint.h"
+#include "stdbool.h"
 
-/* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
 /* USER CODE END Includes */
@@ -50,35 +46,20 @@ extern "C" {
 /* USER CODE END EM */
 
 /* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
-
 /* USER CODE BEGIN EFP */
+void MX_TOUCH_Init(void);
+void MX_TOUCH_Init_With_Rotation(uint8_t rotation);
+void MX_TOUCH_Set_Rotation(uint8_t rotation);
+uint8_t MX_TOUCH_Get_Status(void);     /* number of points (0..2) */
+void MX_TOUCH_Get_Position(uint16_t *x, uint16_t *y); /* first point (mapped to rotation) */
+bool MX_TOUCH_Is_Interrupted(void);
+void MX_TOUCH_Clear_Interrupt(void);
 
+/* Bare-metal quick test: draws small cross or returns latest coords */
+void MX_TOUCH_Baremetal_Test_Tick(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define TFT_LED_Pin GPIO_PIN_4
-#define TFT_LED_GPIO_Port GPIOA
-#define TFT_SCL_Pin GPIO_PIN_5
-#define TFT_SCL_GPIO_Port GPIOA
-#define TFT_DC_Pin GPIO_PIN_6
-#define TFT_DC_GPIO_Port GPIOA
-#define TFT_SDA_Pin GPIO_PIN_7
-#define TFT_SDA_GPIO_Port GPIOA
-#define TFT_RST_Pin GPIO_PIN_4
-#define TFT_RST_GPIO_Port GPIOC
-#define TFT_CS_Pin GPIO_PIN_5
-#define TFT_CS_GPIO_Port GPIOC
-#define FT_RST_Pin GPIO_PIN_4
-#define FT_RST_GPIO_Port GPIOB
-#define FT_INT_Pin GPIO_PIN_5
-#define FT_INT_GPIO_Port GPIOB
-#define FT_INT_EXTI_IRQn EXTI9_5_IRQn
-#define FT_SCL_Pin GPIO_PIN_6
-#define FT_SCL_GPIO_Port GPIOB
-#define FT_SDA_Pin GPIO_PIN_7
-#define FT_SDA_GPIO_Port GPIOB
-
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
@@ -87,4 +68,4 @@ void Error_Handler(void);
 }
 #endif
 
-#endif /* __MAIN_H */
+#endif //STM32F4_4SPI_H_TOUCH_H
