@@ -54,19 +54,24 @@ include_directories(
         Drivers/STM32F4xx_HAL_Driver/Inc
         Drivers/STM32F4xx_HAL_Driver/Inc/Legacy
         Drivers/CMSIS/Device/ST/STM32F4xx/Include
-        Drivers/CMSIS/Include USB_DEVICE/App
-        USB_DEVICE/Target
-        Middlewares/ST/STM32_USB_Device_Library/Core/Inc
-        Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc
+        Drivers/CMSIS/Include
+
         USER
+
         GUI
         GUI/examples
         GUI/examples/porting
+
+        GUI_APP
+        GUI_APP/generated
+        GUI_APP/generated/images
+        GUI_APP/custom
+
 )
 
 add_definitions(-DDEBUG -DUSE_HAL_DRIVER -DSTM32F407xx)
 
-file(GLOB_RECURSE SOURCES "DISPLAY/*.*" "Core/*.*" "Drivers/*.*" "USER/*.*" "GUI/*.*")
+file(GLOB_RECURSE SOURCES  "Core/*.*" "Drivers/*.*" "USER/*.*" "GUI/*.*" "GUI_APP/*.*")
 
 set(LINKER_SCRIPT ${CMAKE_SOURCE_DIR}/STM32F407VETX_FLASH.ld)
 

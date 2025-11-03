@@ -26,19 +26,19 @@
 /*Color depth: 1 (1 byte per pixel), 8 (RGB332), 16 (RGB565), 32 (ARGB8888)*/
 #define LV_COLOR_DEPTH 16
 
-/*交换2个字节的RGB565颜色。如果显示器有8位接口（例如SPI），则有用*/
+/*交换 2 字节的 RGB565 颜色。如果显示器具有 8 位接口（例如 SPI），则很有用*/
 #define LV_COLOR_16_SWAP 1
 
 /*Enable features to draw on transparent background.
- *It's required if opa, and transform_* style properties are used.
- *Can be also used if the UI is above another layer, e.g. an OSD menu or video player.*/
+ *如果使用 opa 和 transform_* 样式属性，则需要它.
+ *如果 UI 位于另一层之上，例如 OSD 菜单或视频播放器，也可以使用。*/
 #define LV_COLOR_SCREEN_TRANSP 0
 
 /* Adjust color mix functions rounding. GPUs might calculate color mix (blending) differently.
  * 0: round down, 64: round up from x.75, 128: round up from half, 192: round up from x.25, 254: round up */
 #define LV_COLOR_MIX_ROUND_OFS 0
 
-/*Images pixels with this color will not be drawn if they are chroma keyed)*/
+/*如果采用色度键控，则不会绘制具有此颜色的图像像素）*/
 #define LV_COLOR_CHROMA_KEY lv_color_hex(0x00ff00)         /*pure green*/
 
 /*=========================
@@ -77,10 +77,10 @@
    HAL SETTINGS
  *====================*/
 
-/*默认的显示刷新周期。LVG会在这个时间段内重绘变化区域*/
-#define LV_DISP_DEF_REFR_PERIOD 20      /*[ms]*/
+/*Default display refresh period. LVG will redraw changed areas with this period time*/
+#define LV_DISP_DEF_REFR_PERIOD 10      /*[ms]*/
 
-/*输入设备读取周期，单位为毫秒*/
+/*Input device read period in milliseconds*/
 #define LV_INDEV_DEF_READ_PERIOD 10     /*[ms]*/
 
 /*Use a custom tick source that tells the elapsed time in milliseconds.
@@ -107,13 +107,13 @@
  *-----------*/
 
 /*Enable complex draw engine.
- *Required to draw shadow, gradient, rounded corners, circles, arc, skew lines, image transformations or any masks*/
+ *绘制阴影、渐变、圆角、圆形、圆弧、倾斜线、图像变换或任何蒙版时需要*/
 #define LV_DRAW_COMPLEX 1
 #if LV_DRAW_COMPLEX != 0
 
     /*Allow buffering some shadow calculation.
     *LV_SHADOW_CACHE_SIZE is the max. shadow size to buffer, where shadow size is `shadow_width + radius`
-    *Caching has LV_SHADOW_CACHE_SIZE^2 RAM cost*/
+    *缓存的 RAM 成本为 LV_SHADOW_CACHE_SIZE^2*/
     #define LV_SHADOW_CACHE_SIZE 0
 
     /* Set number of maximally cached circle data.
@@ -361,27 +361,27 @@
 
 /*Montserrat fonts with ASCII range and some symbols using bpp = 4
  *https://fonts.google.com/specimen/Montserrat*/
-#define LV_FONT_MONTSERRAT_8  0
-#define LV_FONT_MONTSERRAT_10 0
-#define LV_FONT_MONTSERRAT_12 0
+#define LV_FONT_MONTSERRAT_8  1
+#define LV_FONT_MONTSERRAT_10 1
+#define LV_FONT_MONTSERRAT_12 1
 #define LV_FONT_MONTSERRAT_14 1
-#define LV_FONT_MONTSERRAT_16 0
-#define LV_FONT_MONTSERRAT_18 0
-#define LV_FONT_MONTSERRAT_20 0
-#define LV_FONT_MONTSERRAT_22 0
-#define LV_FONT_MONTSERRAT_24 0
-#define LV_FONT_MONTSERRAT_26 0
-#define LV_FONT_MONTSERRAT_28 0
-#define LV_FONT_MONTSERRAT_30 0
-#define LV_FONT_MONTSERRAT_32 0
-#define LV_FONT_MONTSERRAT_34 0
-#define LV_FONT_MONTSERRAT_36 0
-#define LV_FONT_MONTSERRAT_38 0
-#define LV_FONT_MONTSERRAT_40 0
-#define LV_FONT_MONTSERRAT_42 0
-#define LV_FONT_MONTSERRAT_44 0
-#define LV_FONT_MONTSERRAT_46 0
-#define LV_FONT_MONTSERRAT_48 0
+#define LV_FONT_MONTSERRAT_16 1
+#define LV_FONT_MONTSERRAT_18 1
+#define LV_FONT_MONTSERRAT_20 1
+#define LV_FONT_MONTSERRAT_22 1
+#define LV_FONT_MONTSERRAT_24 1
+#define LV_FONT_MONTSERRAT_26 1
+#define LV_FONT_MONTSERRAT_28 1
+#define LV_FONT_MONTSERRAT_30 1
+#define LV_FONT_MONTSERRAT_32 1
+#define LV_FONT_MONTSERRAT_34 1
+#define LV_FONT_MONTSERRAT_36 1
+#define LV_FONT_MONTSERRAT_38 1
+#define LV_FONT_MONTSERRAT_40 1
+#define LV_FONT_MONTSERRAT_42 1
+#define LV_FONT_MONTSERRAT_44 1
+#define LV_FONT_MONTSERRAT_46 1
+#define LV_FONT_MONTSERRAT_48 1
 
 /*Demonstrate special features*/
 #define LV_FONT_MONTSERRAT_12_SUBPX      0
@@ -396,8 +396,8 @@
 /*Optionally declare custom fonts here.
  *You can use these fonts as default font too and they will be available globally.
  *E.g. #define LV_FONT_CUSTOM_DECLARE   LV_FONT_DECLARE(my_font_1) LV_FONT_DECLARE(my_font_2)*/
-#define LV_FONT_CUSTOM_DECLARE
 
+#define LV_FONT_CUSTOM_DECLARE LV_FONT_DECLARE(blender16) LV_FONT_DECLARE(blender20) LV_FONT_DECLARE(blender24) LV_FONT_DECLARE(blender28) LV_FONT_DECLARE(blender34)                                                  \
 /*Always set a default font*/
 #define LV_FONT_DEFAULT &lv_font_montserrat_14
 
@@ -749,16 +749,16 @@
  ====================*/
 
 /*Show some widget. It might be required to increase `LV_MEM_SIZE` */
-#define LV_USE_DEMO_WIDGETS 1
+#define LV_USE_DEMO_WIDGETS 0
 #if LV_USE_DEMO_WIDGETS
-#define LV_DEMO_WIDGETS_SLIDESHOW 1
+#define LV_DEMO_WIDGETS_SLIDESHOW 0
 #endif
 
 /*Demonstrate the usage of encoder and keyboard*/
 #define LV_USE_DEMO_KEYPAD_AND_ENCODER 0
 
 /*Benchmark your system*/
-#define LV_USE_DEMO_BENCHMARK 1
+#define LV_USE_DEMO_BENCHMARK1
 #if LV_USE_DEMO_BENCHMARK
 /*Use RGB565A8 images with 16 bit color depth instead of ARGB8565*/
 #define LV_DEMO_BENCHMARK_RGB565A8 0

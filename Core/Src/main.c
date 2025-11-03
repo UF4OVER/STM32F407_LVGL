@@ -26,11 +26,12 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
 #include "lvgl.h"
 #include "lv_port_disp.h"
 #include "lv_port_indev.h"
 #include "lv_examples.h"
+#include "ui_init.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -109,10 +110,10 @@ int main(void) {
     /* USER CODE BEGIN 2 */
     HAL_TIM_Base_Start_IT(&htim6);
     lv_init();
-    HAL_Delay(100);
     lv_port_disp_init();
     lv_port_indev_init();
 
+    ui_init();
     /* USER CODE END 2 */
 
     /* Infinite loop */
