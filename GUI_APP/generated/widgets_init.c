@@ -74,10 +74,7 @@ void clock_count(int *hour, int *min, int *sec)
 }
 #endif
 
-
-const lv_img_dsc_t * START_start_kangtao_imgs[1] = { 
-	&START_start_kangtao4b2557acd3a9c3c4c0847bc3d36e804, 
-};void lv_MAIN_ISET_SPINBOX_increment_event_cb(lv_event_t * event)
+void lv_MAIN_ISET_SPINBOX_increment_event_cb(lv_event_t * event)
 {
 	lv_event_code_t code = lv_event_get_code(event);
 	if(code == LV_EVENT_SHORT_CLICKED || code == LV_EVENT_LONG_PRESSED_REPEAT){

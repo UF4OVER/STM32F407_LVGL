@@ -22,14 +22,15 @@ void ui_init_style(lv_style_t * style)
 
 void init_scr_del_flag(lv_ui *ui)
 {
-  
 	ui->START_del = true;
 	ui->MAIN_del = true;
+	ui->SEETING_del = true;
 }
 
 void setup_ui(lv_ui *ui)
 {
   init_scr_del_flag(ui);
-  setup_scr_START(ui);
-  lv_scr_load(ui->START);
+  setup_scr_MAIN(ui);
+  setup_scr_SEETING(ui);
+  lv_scr_load(ui->MAIN);
 }

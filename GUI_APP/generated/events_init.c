@@ -10,49 +10,62 @@
 #include "events_init.h"
 #include <stdio.h>
 #include "lvgl.h"
-
+#include "gui_guider.h"
 
 static void START_event_handler (lv_event_t *e)
 {
 	lv_event_code_t code = lv_event_get_code(e);
 
 	switch (code) {
-	case LV_EVENT_SCREEN_LOADED:
-	{
-		//Write animation: START_start_kangtao move in x direction
-		lv_anim_t START_start_kangtao_anim_x;
-		lv_anim_init(&START_start_kangtao_anim_x);
-		lv_anim_set_var(&START_start_kangtao_anim_x, guider_ui.START_start_kangtao);
-		lv_anim_set_time(&START_start_kangtao_anim_x, 1000);
-		lv_anim_set_delay(&START_start_kangtao_anim_x, 200);
-		lv_anim_set_exec_cb(&START_start_kangtao_anim_x, (lv_anim_exec_xcb_t)lv_obj_set_x);
-		lv_anim_set_values(&START_start_kangtao_anim_x, lv_obj_get_x(guider_ui.START_start_kangtao), 0);
-		lv_anim_set_path_cb(&START_start_kangtao_anim_x, &lv_anim_path_ease_in);
-		START_start_kangtao_anim_x.repeat_cnt = 1;
-		lv_anim_start(&START_start_kangtao_anim_x);
-		//Write animation: START_start_kangtao move in y direction
-		lv_anim_t START_start_kangtao_anim_y;
-		lv_anim_init(&START_start_kangtao_anim_y);
-		lv_anim_set_var(&START_start_kangtao_anim_y, guider_ui.START_start_kangtao);
-		lv_anim_set_time(&START_start_kangtao_anim_y, 1000);
-		lv_anim_set_delay(&START_start_kangtao_anim_y, 200);
-		lv_anim_set_exec_cb(&START_start_kangtao_anim_y, (lv_anim_exec_xcb_t)lv_obj_set_y);
-		lv_anim_set_values(&START_start_kangtao_anim_y, lv_obj_get_y(guider_ui.START_start_kangtao), 0);
-		lv_anim_set_path_cb(&START_start_kangtao_anim_y, &lv_anim_path_ease_in);
-		START_start_kangtao_anim_y.repeat_cnt = 1;
-		lv_anim_start(&START_start_kangtao_anim_y);
-		break;
-	}
 	default:
 		break;
 	}
 }
 void events_init_START(lv_ui *ui)
 {
-	lv_obj_add_event_cb(ui->START, START_event_handler, LV_EVENT_ALL, NULL);
+	if(ui->START) {
+		lv_obj_add_event_cb(ui->START, START_event_handler, LV_EVENT_ALL, NULL);
+	}
+}
+
+static void nav_load_screen(lv_obj_t * scr)
+{
+    if(scr) lv_scr_load(scr);
+}
+
+static void MAIN_SET_event_handler(lv_event_t * e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if(code == LV_EVENT_CLICKED) {
+        nav_load_screen(guider_ui.SEETING);
+    }
+}
+
+static void SEETING_BACK_event_handler(lv_event_t * e)
+{
+    lv_event_code_t code = lv_event_get_code(e);
+    if(code == LV_EVENT_CLICKED) {
+        nav_load_screen(guider_ui.MAIN);
+    }
+}
+
+void events_init_MAIN(lv_ui *ui)
+{
+    if(ui->MAIN_SET_BTU) {
+        lv_obj_add_event_cb(ui->MAIN_SET_BTU, MAIN_SET_event_handler, LV_EVENT_ALL, NULL);
+    }
+}
+
+void events_init_SEETING(lv_ui *ui)
+{
+    if(ui->SEETING_BACK_BTN) {
+        lv_obj_add_event_cb(ui->SEETING_BACK_BTN, SEETING_BACK_event_handler, LV_EVENT_ALL, NULL);
+    }
 }
 
 void events_init(lv_ui *ui)
 {
-
+    events_init_START(ui);
+    events_init_MAIN(ui);
+    events_init_SEETING(ui);
 }

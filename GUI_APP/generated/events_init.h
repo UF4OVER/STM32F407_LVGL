@@ -20,6 +20,7 @@ void events_init(lv_ui *ui);
 
 void events_init_START(lv_ui *ui);
 void events_init_MAIN(lv_ui *ui);
+void events_init_SEETING(lv_ui *ui);
 
 #ifdef __cplusplus
 }

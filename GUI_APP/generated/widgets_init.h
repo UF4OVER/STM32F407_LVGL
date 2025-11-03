@@ -22,8 +22,7 @@ __attribute__((unused)) void ta_event_cb(lv_event_t *e);
 void clock_count(int *hour, int *min, int *sec);
 #endif
 
-
-extern const lv_img_dsc_t * START_start_kangtao_imgs[1];extern lv_obj_t * MAIN_ISET_SPINBOX;
+extern lv_obj_t * MAIN_ISET_SPINBOX;
 void lv_MAIN_ISET_SPINBOX_increment_event_cb(lv_event_t * event);
 void lv_MAIN_ISET_SPINBOX_decrement_event_cb(lv_event_t * event);
 extern lv_obj_t * MAIN_VSET_SPINBOX;

@@ -20,10 +20,10 @@ typedef struct
   
 	lv_obj_t *START;
 	bool START_del;
-	lv_obj_t *START_start_kangtao;
+	lv_obj_t *START_img_1;
+	lv_obj_t *START_start_label;
 	lv_obj_t *MAIN;
 	bool MAIN_del;
-	lv_obj_t *g_kb_MAIN;
 	lv_obj_t *MAIN_ILIMMODE_LIST;
 	lv_obj_t *MAIN_cont_1;
 	lv_obj_t *MAIN_NAME_INFO;
@@ -94,7 +94,70 @@ typedef struct
 	lv_obj_t *MAIN_btn_7_label;
 	lv_obj_t *MAIN_COMP_BTU;
 	lv_obj_t *MAIN_COMP_BTU_label;
-}lv_ui;
+	lv_obj_t *SEETING;
+	bool SEETING_del;
+	lv_obj_t *SEETING_SET_MEUN;
+	lv_obj_t *SEETING_SET_MEUN_sidebar_page;
+	lv_obj_t *SEETING_SET_MEUN_subpage_1;
+	lv_obj_t *SEETING_SET_MEUN_cont_1;
+	lv_obj_t *SEETING_SET_MEUN_label_1;
+	lv_obj_t *SEETING_SET_MEUN_subpage_2;
+	lv_obj_t *SEETING_SET_MEUN_cont_2;
+	lv_obj_t *SEETING_SET_MEUN_label_2;
+	lv_obj_t *SEETING_SET_MEUN_subpage_3;
+	lv_obj_t *SEETING_SET_MEUN_cont_3;
+	lv_obj_t *SEETING_SET_MEUN_label_3;
+	lv_obj_t *SEETING_SET_MEUN_subpage_4;
+	lv_obj_t *SEETING_SET_MEUN_cont_4;
+	lv_obj_t *SEETING_SET_MEUN_label_4;
+	lv_obj_t *SEETING_SET_MEUN_subpage_5;
+	lv_obj_t *SEETING_SET_MEUN_cont_5;
+	lv_obj_t *SEETING_SET_MEUN_label_5;
+
+		// --- Added: SETTING subpage content ---
+		// Subpage 1: BLE & WiFi
+		lv_obj_t *SEETING_BLE_row;
+		lv_obj_t *SEETING_BLE_label;
+		lv_obj_t *SEETING_BLE_switch;
+		lv_obj_t *SEETING_WIFI_row;
+		lv_obj_t *SEETING_WIFI_label;
+		lv_obj_t *SEETING_WIFI_switch;
+
+		// Subpage 2: Device & Info
+		lv_obj_t *SEETING_DEVICE_row_name;
+		lv_obj_t *SEETING_DEVICE_label_name;
+		lv_obj_t *SEETING_DEVICE_row_sn;
+		lv_obj_t *SEETING_DEVICE_label_sn;
+		lv_obj_t *SEETING_DEVICE_row_fw;
+		lv_obj_t *SEETING_DEVICE_label_fw;
+
+		// Subpage 3: Themes
+		lv_obj_t *SEETING_THEME_row_dark;
+		lv_obj_t *SEETING_THEME_label_dark;
+		lv_obj_t *SEETING_THEME_switch_dark;
+		lv_obj_t *SEETING_THEME_row_contrast;
+		lv_obj_t *SEETING_THEME_label_contrast;
+		lv_obj_t *SEETING_THEME_switch_contrast;
+
+		// Subpage 4: PID & Info
+		lv_obj_t *SEETING_PID_row_enable;
+		lv_obj_t *SEETING_PID_label_enable;
+		lv_obj_t *SEETING_PID_switch_enable;
+		lv_obj_t *SEETING_PID_row_kp;
+		lv_obj_t *SEETING_PID_label_kp;
+		lv_obj_t *SEETING_PID_row_ki;
+		lv_obj_t *SEETING_PID_label_ki;
+		lv_obj_t *SEETING_PID_row_kd;
+		lv_obj_t *SEETING_PID_label_kd;
+
+		// Subpage 5: Boot Version
+		lv_obj_t *SEETING_BOOT_row_ver;
+		lv_obj_t *SEETING_BOOT_label_ver;
+
+		// Back button on SETTING screen
+		lv_obj_t *SEETING_BACK_BTN;
+		lv_obj_t *SEETING_BACK_BTN_label;
+	}lv_ui;
 
 void ui_init_style(lv_style_t * style);
 void init_scr_del_flag(lv_ui *ui);
@@ -103,12 +166,13 @@ extern lv_ui guider_ui;
 
 void setup_scr_START(lv_ui *ui);
 void setup_scr_MAIN(lv_ui *ui);
-#include "src/extra/widgets/animimg/lv_animimg.h"
-LV_IMG_DECLARE(START_start_kangtao4b2557acd3a9c3c4c0847bc3d36e804);
+void setup_scr_SEETING(lv_ui *ui);
+LV_IMG_DECLARE(_4b2557acd3a9c3c4c0847bc3d36e804_alpha_450x150);
 
+LV_FONT_DECLARE(lv_font_blender_pro_bold_18)
+LV_FONT_DECLARE(lv_font_blender_pro_bold_16)
 LV_FONT_DECLARE(lv_font_blender_pro_bold_20)
 LV_FONT_DECLARE(lv_font_montserratMedium_12)
-LV_FONT_DECLARE(lv_font_blender_pro_bold_18)
 LV_FONT_DECLARE(lv_font_montserratMedium_16)
 LV_FONT_DECLARE(lv_font_blender_pro_bold_26)
 LV_FONT_DECLARE(lv_font_blender_pro_bold_24)

@@ -21,10 +21,6 @@ lv_obj_t * MAIN_VSET_SPINBOX;void setup_scr_MAIN(lv_ui *ui)
 {
 	//Write codes MAIN
 	ui->MAIN = lv_obj_create(NULL);
-	ui->g_kb_MAIN = lv_keyboard_create(ui->MAIN);
-	lv_obj_add_event_cb(ui->g_kb_MAIN, kb_event_cb, LV_EVENT_ALL, NULL);
-	lv_obj_add_flag(ui->g_kb_MAIN, LV_OBJ_FLAG_HIDDEN);
-	lv_obj_set_style_text_font(ui->g_kb_MAIN, &lv_font_blender_pro_bold_18, LV_PART_MAIN|LV_STATE_DEFAULT);
 	lv_obj_set_size(ui->MAIN, 480, 320);
 	lv_obj_set_scrollbar_mode(ui->MAIN, LV_SCROLLBAR_MODE_OFF);
 
