@@ -8,59 +8,24 @@
 */
 
 #include "events_init.h"
-#include <stdio.h>
-#include "lvgl.h"
 #include "gui_guider.h"
+#include "START_INTERFACE_Event.h"
+#include "MAIN_INTERFACE_Event.h"
+#include "SEETING_INTERFACE_Event.h"
 
-static void START_event_handler (lv_event_t *e)
-{
-	lv_event_code_t code = lv_event_get_code(e);
-
-	switch (code) {
-	default:
-		break;
-	}
-}
 void events_init_START(lv_ui *ui)
 {
-	if(ui->START) {
-		lv_obj_add_event_cb(ui->START, START_event_handler, LV_EVENT_ALL, NULL);
-	}
-}
-
-static void nav_load_screen(lv_obj_t * scr)
-{
-    if(scr) lv_scr_load(scr);
-}
-
-static void MAIN_SET_event_handler(lv_event_t * e)
-{
-    lv_event_code_t code = lv_event_get_code(e);
-    if(code == LV_EVENT_CLICKED) {
-        nav_load_screen(guider_ui.SEETING);
-    }
-}
-
-static void SEETING_BACK_event_handler(lv_event_t * e)
-{
-    lv_event_code_t code = lv_event_get_code(e);
-    if(code == LV_EVENT_CLICKED) {
-        nav_load_screen(guider_ui.MAIN);
-    }
+    START_INTERFACE_events_init(ui);
 }
 
 void events_init_MAIN(lv_ui *ui)
 {
-    if(ui->MAIN_SET_BTU) {
-        lv_obj_add_event_cb(ui->MAIN_SET_BTU, MAIN_SET_event_handler, LV_EVENT_ALL, NULL);
-    }
+    MAIN_INTERFACE_events_init(ui);
 }
 
 void events_init_SEETING(lv_ui *ui)
 {
-    if(ui->SEETING_BACK_BTN) {
-        lv_obj_add_event_cb(ui->SEETING_BACK_BTN, SEETING_BACK_event_handler, LV_EVENT_ALL, NULL);
-    }
+    SEETING_INTERFACE_events_init(ui);
 }
 
 void events_init(lv_ui *ui)

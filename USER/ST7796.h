@@ -10,21 +10,18 @@
 #define VERTICAL_IMAGE		    1
 
 //SPI INSTANCE
-extern SPI_HandleTypeDef hspi1;
-#define LEOPARD_BOARD							  &hspi1
+extern SPI_HandleTypeDef hspi2;
+#define LEOPARD_BOARD							  &hspi2
 
 
-//CHIP SELECT PIN AND PORT, STANDARD GPIO
-#define LCD_CS_PORT								GPIOC
-#define LCD_CS_PIN								TFT_CS_Pin
+#define LCD_CS_PORT								LCD_CS_GPIO_Port
+#define LCD_CS_PIN								LCD_CS_Pin
 
-//DATA COMMAND PIN AND PORT, STANDARD GPIO
-#define LCD_DC_PORT								GPIOA
-#define LCD_DC_PIN								TFT_DC_Pin
+#define LCD_DC_PORT								LCD_DC_GPIO_Port
+#define LCD_DC_PIN								LCD_DC_Pin
 
-//RESET PIN AND PORT, STANDARD GPIO
-#define	LCD_RST_PORT							GPIOC
-#define	LCD_RST_PIN								TFT_RST_Pin
+#define	LCD_RST_PORT							LCD_RST_GPIO_Port
+#define	LCD_RST_PIN								LCD_RST_Pin
 
 #define BURST_MAX_SIZE 	   500
 

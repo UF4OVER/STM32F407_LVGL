@@ -232,7 +232,7 @@ void lv_obj_add_flag(lv_obj_t * obj, lv_obj_flag_t f)
 
     bool was_on_layout = lv_obj_is_layout_positioned(obj);
 
-    /* We must invalidate the area occupied by the object before we hide it as calls to invalidate hidden objects are ignored */
+    /* 在隐藏对象之前，必须使其占用的区域失效，因为对隐藏对象失效的调用会被忽略*/
     if(f & LV_OBJ_FLAG_HIDDEN) lv_obj_invalidate(obj);
 
     obj->flags |= f;

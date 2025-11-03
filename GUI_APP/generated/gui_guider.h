@@ -177,6 +177,37 @@ LV_FONT_DECLARE(lv_font_montserratMedium_16)
 LV_FONT_DECLARE(lv_font_blender_pro_bold_26)
 LV_FONT_DECLARE(lv_font_blender_pro_bold_24)
 
+// --- UI Color Palette (centralized) ---
+#ifndef UI_COLOR_SCREEN_BG
+#define UI_COLOR_SCREEN_BG          0x8e8e8e
+#endif
+#ifndef UI_COLOR_SIDEBAR_BG
+#define UI_COLOR_SIDEBAR_BG         0xdaf2f8
+#endif
+#ifndef UI_COLOR_ROW_BG
+#define UI_COLOR_ROW_BG             0xf5f5f5
+#endif
+#ifndef UI_COLOR_BACK_BTN_BG
+#define UI_COLOR_BACK_BTN_BG        0x303030
+#endif
+#ifndef UI_COLOR_BACK_BTN_TEXT
+#define UI_COLOR_BACK_BTN_TEXT      0xffffff
+#endif
+#ifndef UI_COLOR_MENU_TEXT
+#define UI_COLOR_MENU_TEXT          0x151212
+#endif
+#ifndef UI_COLOR_MENU_TEXT_CHECK
+#define UI_COLOR_MENU_TEXT_CHECK    0x9ab700
+#endif
+#ifndef UI_COLOR_MENU_CHECK_BG
+#define UI_COLOR_MENU_CHECK_BG      0x00e0b8
+#endif
+#ifndef UI_COLOR_TITLE_TEXT
+#define UI_COLOR_TITLE_TEXT         0x41485a
+#endif
+#ifndef UI_COLOR_TITLE_BG
+#define UI_COLOR_TITLE_BG           0xffffff
+#endif
 
 #ifdef __cplusplus
 }
