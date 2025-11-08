@@ -10,7 +10,7 @@
  *      INCLUDES
  *********************/
 #include "lv_port_indev.h"
-#include "ST7796.h"
+#include "H_ST7796.h"
 #include "H_TOUCH.h"
 
 /*********************

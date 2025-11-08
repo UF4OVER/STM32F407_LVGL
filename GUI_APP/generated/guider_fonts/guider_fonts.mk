@@ -1,6 +1,4 @@
-# SPDX-License-Identifier: MIT
-# Copyright 2020-2023 NXP
-GEN_CSRCS += $(notdir $(wildcard $(PRJ_DIR)/generated/guider_fonts/*.c))
+-include $(PRJ_DIR)/generated/guider_fonts/fonts_list.mk
 
 DEPPATH += --dep-path $(PRJ_DIR)/generated/guider_fonts
 VPATH += :$(PRJ_DIR)/generated/guider_fonts

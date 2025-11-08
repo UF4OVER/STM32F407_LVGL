@@ -46,7 +46,7 @@ elseif ("${CMAKE_BUILD_TYPE}" STREQUAL "MinSizeRel")
     add_compile_options(-Os)
 else ()
     message(STATUS "Minimal optimization, debug info included")
-    add_compile_options(-O0g -g)
+    add_compile_options(-Og -g)
 endif ()
 
 include_directories(
@@ -57,6 +57,9 @@ include_directories(
         Drivers/CMSIS/Include
 
         USER
+        USER/ControlMode
+        USER/HardwareDriver
+        USER/SoftwareAnalysis
 
         GUI
         GUI/examples

@@ -11,7 +11,7 @@
  *********************/
 #include "lv_port_disp.h"
 #include <stdbool.h>
-#include "ST7796.h"
+#include "H_ST7796.h"
 /*********************
  *      DEFINES
  *********************/
@@ -132,8 +132,6 @@ static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_colo
     ST7796_PushColors((uint16_t*)color_p, size);
     lv_disp_flush_ready(disp_drv);
 }
-
-
 
 #else /*Enable this file at the top*/
 

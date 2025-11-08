@@ -20,7 +20,6 @@
 #include "ui_init.h"
 #include "custom.h"
 /* USER CODE BEGIN Includes */
-
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/

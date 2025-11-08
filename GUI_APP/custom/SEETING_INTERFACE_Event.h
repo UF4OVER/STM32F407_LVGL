@@ -15,4 +15,3 @@ void SEETING_INTERFACE_events_init(lv_ui *ui);
 #endif
 
 #endif // SEETING_INTERFACE_EVENT_H
-

@@ -9,14 +9,16 @@
 #define OVP_MIN_V 0.00f
 #endif
 #ifndef OVP_MAX_V
-#define OVP_MAX_V 60.00f
+#define OVP_MAX_V 30.00f
 #endif
 #ifndef OCP_MIN_A
 #define OCP_MIN_A 0.00f
 #endif
 #ifndef OCP_MAX_A
-#define OCP_MAX_A 20.00f
+#define OCP_MAX_A 9.00f
 #endif
+
+
 
 /* Tiny clamp helper for doubles */
 static inline double clampd(double v, double lo, double hi)

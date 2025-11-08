@@ -513,7 +513,7 @@ lv_coord_t lv_disp_get_dpi(const lv_disp_t * disp)
 }
 
 /**
- * Call in the display driver's `flush_cb` function when the flushing is finished
+ *刷新完成时调用显示驱动程序的`flush_cb`函数
  * @param disp_drv pointer to display driver in `flush_cb` where this function is called
  */
 void LV_ATTRIBUTE_FLUSH_READY lv_disp_flush_ready(lv_disp_drv_t * disp_drv)

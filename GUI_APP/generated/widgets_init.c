@@ -1,6 +1,6 @@
 /*
 * Copyright 2025 NXP
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be used strictly in
+* NXP Proprietary. This software is owned or controlled by NXP and may only be used strictly in
 * accordance with the applicable license terms. By expressly accepting such terms or by downloading, installing,
 * activating and/or otherwise using the software, you are agreeing that you have read, and that you agree to
 * comply with and are bound by, such license terms.  If you do not agree to be bound by the applicable license
@@ -10,12 +10,14 @@
 #include "lvgl.h"
 #include "gui_guider.h"
 #include "widgets_init.h"
+#include <stdlib.h>
+#include <string.h>
 
 
 __attribute__((unused)) void kb_event_cb (lv_event_t *e) {
     lv_event_code_t code = lv_event_get_code(e);
     lv_obj_t *kb = lv_event_get_target(e);
-    if(code == LV_EVENT_READY || code == LV_EVENT_CANCEL){
+    if(code == LV_EVENT_READY || code == LV_EVENT_CANCEL) {
         lv_obj_add_flag(kb, LV_OBJ_FLAG_HIDDEN);
     }
 }
@@ -74,32 +76,32 @@ void clock_count(int *hour, int *min, int *sec)
 }
 #endif
 
-void lv_MAIN_ISET_SPINBOX_increment_event_cb(lv_event_t * event)
+void lv_MAIN_PAGE_IET_SPINBOX_increment_event_cb(lv_event_t * event)
 {
-	lv_event_code_t code = lv_event_get_code(event);
-	if(code == LV_EVENT_SHORT_CLICKED || code == LV_EVENT_LONG_PRESSED_REPEAT){
-	  lv_spinbox_increment(MAIN_ISET_SPINBOX);
-	}
+    lv_event_code_t code = lv_event_get_code(event);
+    if(code == LV_EVENT_SHORT_CLICKED || code == LV_EVENT_LONG_PRESSED_REPEAT) {
+        lv_spinbox_increment(guider_ui.MAIN_PAGE_IET_SPINBOX);
+    }
 }
-void lv_MAIN_ISET_SPINBOX_decrement_event_cb(lv_event_t * event)
+void lv_MAIN_PAGE_IET_SPINBOX_decrement_event_cb(lv_event_t * event)
 {
-	lv_event_code_t code = lv_event_get_code(event);
-	if(code == LV_EVENT_SHORT_CLICKED || code == LV_EVENT_LONG_PRESSED_REPEAT){
-	  lv_spinbox_decrement(MAIN_ISET_SPINBOX);
-	}
+    lv_event_code_t code = lv_event_get_code(event);
+    if(code == LV_EVENT_SHORT_CLICKED || code == LV_EVENT_LONG_PRESSED_REPEAT) {
+        lv_spinbox_decrement(guider_ui.MAIN_PAGE_IET_SPINBOX);
+    }
 }
-void lv_MAIN_VSET_SPINBOX_increment_event_cb(lv_event_t * event)
+void lv_MAIN_PAGE_VET_SPINBOX_increment_event_cb(lv_event_t * event)
 {
-	lv_event_code_t code = lv_event_get_code(event);
-	if(code == LV_EVENT_SHORT_CLICKED || code == LV_EVENT_LONG_PRESSED_REPEAT){
-	  lv_spinbox_increment(MAIN_VSET_SPINBOX);
-	}
+    lv_event_code_t code = lv_event_get_code(event);
+    if(code == LV_EVENT_SHORT_CLICKED || code == LV_EVENT_LONG_PRESSED_REPEAT) {
+        lv_spinbox_increment(guider_ui.MAIN_PAGE_VET_SPINBOX);
+    }
 }
-void lv_MAIN_VSET_SPINBOX_decrement_event_cb(lv_event_t * event)
+void lv_MAIN_PAGE_VET_SPINBOX_decrement_event_cb(lv_event_t * event)
 {
-	lv_event_code_t code = lv_event_get_code(event);
-	if(code == LV_EVENT_SHORT_CLICKED || code == LV_EVENT_LONG_PRESSED_REPEAT){
-	  lv_spinbox_decrement(MAIN_VSET_SPINBOX);
-	}
+    lv_event_code_t code = lv_event_get_code(event);
+    if(code == LV_EVENT_SHORT_CLICKED || code == LV_EVENT_LONG_PRESSED_REPEAT) {
+        lv_spinbox_decrement(guider_ui.MAIN_PAGE_VET_SPINBOX);
+    }
 }
 

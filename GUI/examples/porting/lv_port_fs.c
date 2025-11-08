@@ -9,9 +9,8 @@
 /*********************
  *      INCLUDES
  *********************/
-#include "lv_port_fs_template.h"
+#include "lv_port_fs.h"
 #include "../../lvgl.h"
-
 /*********************
  *      DEFINES
  *********************/

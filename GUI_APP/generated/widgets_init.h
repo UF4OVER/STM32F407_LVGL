@@ -1,6 +1,6 @@
 /*
 * Copyright 2025 NXP
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be used strictly in
+* NXP Proprietary. This software is owned or controlled by NXP and may only be used strictly in
 * accordance with the applicable license terms. By expressly accepting such terms or by downloading, installing,
 * activating and/or otherwise using the software, you are agreeing that you have read, and that you agree to
 * comply with and are bound by, such license terms.  If you do not agree to be bound by the applicable license
@@ -22,12 +22,12 @@ __attribute__((unused)) void ta_event_cb(lv_event_t *e);
 void clock_count(int *hour, int *min, int *sec);
 #endif
 
-extern lv_obj_t * MAIN_ISET_SPINBOX;
-void lv_MAIN_ISET_SPINBOX_increment_event_cb(lv_event_t * event);
-void lv_MAIN_ISET_SPINBOX_decrement_event_cb(lv_event_t * event);
-extern lv_obj_t * MAIN_VSET_SPINBOX;
-void lv_MAIN_VSET_SPINBOX_increment_event_cb(lv_event_t * event);
-void lv_MAIN_VSET_SPINBOX_decrement_event_cb(lv_event_t * event);
+extern lv_obj_t * MAIN_PAGE_IET_SPINBOX;
+void lv_MAIN_PAGE_IET_SPINBOX_increment_event_cb(lv_event_t * event);
+void lv_MAIN_PAGE_IET_SPINBOX_decrement_event_cb(lv_event_t * event);
+extern lv_obj_t * MAIN_PAGE_VET_SPINBOX;
+void lv_MAIN_PAGE_VET_SPINBOX_increment_event_cb(lv_event_t * event);
+void lv_MAIN_PAGE_VET_SPINBOX_decrement_event_cb(lv_event_t * event);
 
 
 #ifdef __cplusplus

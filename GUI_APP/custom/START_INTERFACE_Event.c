@@ -11,8 +11,8 @@ static void START_event_handler (lv_event_t *e)
 
 void START_INTERFACE_events_init(lv_ui *ui)
 {
-    if(ui->START) {
-        lv_obj_add_event_cb(ui->START, START_event_handler, LV_EVENT_ALL, NULL);
+    if(ui->START_PAGE) {
+        lv_obj_add_event_cb(ui->START_PAGE, START_event_handler, LV_EVENT_ALL, NULL);
     }
 }
 
