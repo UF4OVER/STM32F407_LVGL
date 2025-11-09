@@ -110,7 +110,6 @@ int main(void)
     lv_init();
     lv_port_disp_init();
     lv_port_indev_init();
-
     ui_init();
   /* USER CODE END 2 */
 
@@ -189,29 +188,18 @@ static void MX_NVIC_Init(void)
 
 /* USER CODE BEGIN 4 */
 
-/* USER CODE END 4 */
-
-/**
-  * @brief  Period elapsed callback in non blocking mode
-  * @note   This function is called  when TIM1 interrupt took place, inside
-  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
-  * a global variable "uwTick" used as application time base.
-  * @param  htim : TIM handle
-  * @retval None
-  */
+/* Ensure LVGL tick advances every 1 ms using the HAL timebase (TIM1) */
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-  /* USER CODE BEGIN Callback 0 */
-
-  /* USER CODE END Callback 0 */
   if (htim->Instance == TIM1)
   {
     HAL_IncTick();
+    /* Advance LVGL tick as well */
+    lv_tick_inc(1);
   }
-  /* USER CODE BEGIN Callback 1 */
-
-  /* USER CODE END Callback 1 */
 }
+
+/* USER CODE END 4 */
 
 /**
   * @brief  This function is executed in case of error occurrence.

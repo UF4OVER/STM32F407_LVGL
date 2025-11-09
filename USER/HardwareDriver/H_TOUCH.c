@@ -133,29 +133,6 @@ void MX_TOUCH_Get_Position(uint16_t *x, uint16_t *y)
     if(x) *x = mx;
     if(y) *y = my;
 }
-
-void MX_TOUCH_Baremetal_Test_Tick(void)
-{
-    static uint8_t counter = 0;
-    uint8_t n = MX_TOUCH_Get_Status();
-
-    char status_text[32];
-    snprintf(status_text, sizeof(status_text), "TD:%u Cnt:%u", (unsigned)n, (unsigned)counter++);
-    ST7796_Draw_Text(status_text, 10, 70, BLACK, 2, WHITE);
-
-    if(n > 0) {
-        uint16_t dx = 0, dy = 0;
-        MX_TOUCH_Get_Position(&dx, &dy); // already mapped
-        // 使用当前屏幕横竖参数做边界
-        if(dx < ST7796_SCREEN_HEIGHT && dy < ST7796_SCREEN_WIDTH) {
-            ST7796_Draw_Rectangle((dx>2?dx-2:0), (dy>2?dy-2:0), 5, 5, RED);
-        }
-        char coord_text[32];
-        snprintf(coord_text, sizeof(coord_text), "X:%u Y:%u", dx, dy);
-        ST7796_Draw_Text(coord_text, 10, 40, BLACK, 2, WHITE);
-    }
-}
-
 bool MX_TOUCH_Is_Interrupted(void)
 {
     return s_touch_irq;

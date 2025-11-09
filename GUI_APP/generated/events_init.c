@@ -22,7 +22,7 @@ static void START_PAGE_event_handler (lv_event_t *e)
     switch (code) {
     case LV_EVENT_SCREEN_LOADED:
     {
-        ui_load_scr_animation(&guider_ui, &guider_ui.MAIN_PAGE, guider_ui.MAIN_PAGE_del, &guider_ui.START_PAGE_del, setup_scr_MAIN_PAGE, LV_SCR_LOAD_ANIM_OVER_BOTTOM, 200, 200, false, true);
+        ui_load_scr_animation(&guider_ui, &guider_ui.MAIN_PAGE, guider_ui.MAIN_PAGE_del, &guider_ui.START_PAGE_del, setup_scr_MAIN_PAGE, LV_SCR_LOAD_ANIM_NONE, 0, 0, false, false);
         break;
     }
     default:
@@ -41,7 +41,7 @@ static void MAIN_PAGE_CHART_BTU_event_handler (lv_event_t *e)
     switch (code) {
     case LV_EVENT_CLICKED:
     {
-        ui_load_scr_animation(&guider_ui, &guider_ui.CHART_PAGE, guider_ui.CHART_PAGE_del, &guider_ui.MAIN_PAGE_del, setup_scr_CHART_PAGE, LV_SCR_LOAD_ANIM_OVER_BOTTOM, 200, 200, false, true);
+        ui_load_scr_animation(&guider_ui, &guider_ui.CHART_PAGE, guider_ui.CHART_PAGE_del, &guider_ui.MAIN_PAGE_del, setup_scr_CHART_PAGE, LV_SCR_LOAD_ANIM_NONE, 0, 0, false, false);
         break;
     }
     default:
@@ -55,7 +55,7 @@ static void MAIN_PAGE_MEUN_BTU_event_handler (lv_event_t *e)
     switch (code) {
     case LV_EVENT_CLICKED:
     {
-        ui_load_scr_animation(&guider_ui, &guider_ui.MEUN_PAGE, guider_ui.MEUN_PAGE_del, &guider_ui.MAIN_PAGE_del, setup_scr_MEUN_PAGE, LV_SCR_LOAD_ANIM_OVER_BOTTOM, 200, 200, false, true);
+        ui_load_scr_animation(&guider_ui, &guider_ui.MEUN_PAGE, guider_ui.MEUN_PAGE_del, &guider_ui.MAIN_PAGE_del, setup_scr_MEUN_PAGE, LV_SCR_LOAD_ANIM_NONE, 0, 0, false, false);
         break;
     }
     default:
@@ -63,13 +63,13 @@ static void MAIN_PAGE_MEUN_BTU_event_handler (lv_event_t *e)
     }
 }
 
-static void MAIN_PAGE_OSCILLO_BTU_event_handler (lv_event_t *e)
+static void MAIN_PAGE_OSC_BTU_event_handler (lv_event_t *e)
 {
     lv_event_code_t code = lv_event_get_code(e);
     switch (code) {
     case LV_EVENT_CLICKED:
     {
-        ui_load_scr_animation(&guider_ui, &guider_ui.OSCILLO_PAGE, guider_ui.OSCILLO_PAGE_del, &guider_ui.MAIN_PAGE_del, setup_scr_OSCILLO_PAGE, LV_SCR_LOAD_ANIM_OVER_RIGHT, 200, 200, false, true);
+        ui_load_scr_animation(&guider_ui, &guider_ui.OSCILLO_PAGE, guider_ui.OSCILLO_PAGE_del, &guider_ui.MAIN_PAGE_del, setup_scr_OSCILLO_PAGE, LV_SCR_LOAD_ANIM_NONE, 0, 0, false, false);
         break;
     }
     default:
@@ -81,7 +81,7 @@ void events_init_MAIN_PAGE (lv_ui *ui)
 {
     lv_obj_add_event_cb(ui->MAIN_PAGE_CHART_BTU, MAIN_PAGE_CHART_BTU_event_handler, LV_EVENT_ALL, ui);
     lv_obj_add_event_cb(ui->MAIN_PAGE_MEUN_BTU, MAIN_PAGE_MEUN_BTU_event_handler, LV_EVENT_ALL, ui);
-    lv_obj_add_event_cb(ui->MAIN_PAGE_OSCILLO_BTU, MAIN_PAGE_OSCILLO_BTU_event_handler, LV_EVENT_ALL, ui);
+    lv_obj_add_event_cb(ui->MAIN_PAGE_OSC_BTU, MAIN_PAGE_OSC_BTU_event_handler, LV_EVENT_ALL, ui);
 }
 
 static void MEUN_PAGE_BACK_SET_BTU_event_handler (lv_event_t *e)
@@ -90,7 +90,7 @@ static void MEUN_PAGE_BACK_SET_BTU_event_handler (lv_event_t *e)
     switch (code) {
     case LV_EVENT_CLICKED:
     {
-        ui_load_scr_animation(&guider_ui, &guider_ui.MAIN_PAGE, guider_ui.MAIN_PAGE_del, &guider_ui.MEUN_PAGE_del, setup_scr_MAIN_PAGE, LV_SCR_LOAD_ANIM_OVER_TOP, 200, 200, true, true);
+        ui_load_scr_animation(&guider_ui, &guider_ui.MAIN_PAGE, guider_ui.MAIN_PAGE_del, &guider_ui.MEUN_PAGE_del, setup_scr_MAIN_PAGE, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
         break;
     }
     default:
@@ -109,7 +109,7 @@ static void OSCILLO_PAGE_BACK_OSCILLO_BTU_event_handler (lv_event_t *e)
     switch (code) {
     case LV_EVENT_CLICKED:
     {
-        ui_load_scr_animation(&guider_ui, &guider_ui.MAIN_PAGE, guider_ui.MAIN_PAGE_del, &guider_ui.OSCILLO_PAGE_del, setup_scr_MAIN_PAGE, LV_SCR_LOAD_ANIM_OVER_LEFT, 200, 200, true, true);
+        ui_load_scr_animation(&guider_ui, &guider_ui.MAIN_PAGE, guider_ui.MAIN_PAGE_del, &guider_ui.OSCILLO_PAGE_del, setup_scr_MAIN_PAGE, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
         break;
     }
     default:
@@ -128,7 +128,7 @@ static void CHART_PAGE_BACK_CHART_BTU_event_handler (lv_event_t *e)
     switch (code) {
     case LV_EVENT_CLICKED:
     {
-        ui_load_scr_animation(&guider_ui, &guider_ui.MAIN_PAGE, guider_ui.MAIN_PAGE_del, &guider_ui.CHART_PAGE_del, setup_scr_MAIN_PAGE, LV_SCR_LOAD_ANIM_OVER_TOP, 200, 200, true, true);
+        ui_load_scr_animation(&guider_ui, &guider_ui.MAIN_PAGE, guider_ui.MAIN_PAGE_del, &guider_ui.CHART_PAGE_del, setup_scr_MAIN_PAGE, LV_SCR_LOAD_ANIM_NONE, 0, 0, true, true);
         break;
     }
     default:

@@ -12,7 +12,6 @@
 #include <stdio.h>
 #include "lvgl.h"
 #include "custom.h"
-
 /*********************
  *      DEFINES
  *********************/
@@ -35,6 +34,8 @@
 
 void custom_init(lv_ui *ui)
 {
+ MAIN_INTERFACE_events_init(ui);
+
     /* Add your codes here */
 }
 

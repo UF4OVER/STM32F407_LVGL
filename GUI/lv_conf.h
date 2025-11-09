@@ -77,10 +77,10 @@
    HAL SETTINGS
  *====================*/
 
-/*Default display refresh period. LVG will redraw changed areas with this period time*/
-#define LV_DISP_DEF_REFR_PERIOD 10      /*[ms]*/
+/*默认的显示刷新周期。LVG会在这段时间内重绘变化区域*/
+#define LV_DISP_DEF_REFR_PERIOD 5      /*[ms]*/
 
-/*Input device read period in milliseconds*/
+/*输入设备读取周期，单位为毫秒*/
 #define LV_INDEV_DEF_READ_PERIOD 10     /*[ms]*/
 
 /*Use a custom tick source that tells the elapsed time in milliseconds.
@@ -262,10 +262,10 @@
  * Asserts
  *-----------*/
 
-/*Enable asserts if an operation is failed or an invalid data is found.
- *If LV_USE_LOG is enabled an error message will be printed on failure*/
-#define LV_USE_ASSERT_NULL          1   /*Check if the parameter is NULL. (Very fast, recommended)*/
-#define LV_USE_ASSERT_MALLOC        1   /*Checks is the memory is successfully allocated or no. (Very fast, recommended)*/
+/* Enable操作失败或发现无效数据时的断言。
+ * 如果LV_USE_LOG被启用，失败时将打印错误信息*/
+#define LV_USE_ASSERT_NULL          1   /*检查参数是否为NULL。（非常快，推荐）*/
+#define LV_USE_ASSERT_MALLOC        1   /*检查内存是否分配成功。（非常快，推荐）*/
 #define LV_USE_ASSERT_STYLE         0   /*Check if the styles are properly initialized. (Very fast, recommended)*/
 #define LV_USE_ASSERT_MEM_INTEGRITY 0   /*Check the integrity of `lv_mem` after critical operations. (Slow)*/
 #define LV_USE_ASSERT_OBJ           0   /*Check the object's type and existence (e.g. not deleted). (Slow)*/
@@ -469,7 +469,7 @@
  *  WIDGET USAGE
  *================*/
 
-/*Documentation of the widgets: https://docs.lvgl.io/latest/en/html/widgets/index.html*/
+/*小部件的文档：https://docs.lvgl.io/latest/en/html/widgets/index.html*/
 
 #define LV_USE_ARC        1
 
@@ -500,7 +500,7 @@
     #define LV_ROLLER_INF_PAGES 7 /*Number of extra "pages" when the roller is infinite*/
 #endif
 
-#define LV_USE_SLIDER     1   /*Requires: lv_bar*/
+#define LV_USE_SLIDER     0   /*Requires: lv_bar*/
 
 #define LV_USE_SWITCH     1
 
@@ -536,13 +536,13 @@
 
 #define LV_USE_CHART      1
 
-#define LV_USE_COLORWHEEL 1
+#define LV_USE_COLORWHEEL 0
 
-#define LV_USE_IMGBTN     1
+#define LV_USE_IMGBTN     0
 
 #define LV_USE_KEYBOARD   1
 
-#define LV_USE_LED        1
+#define LV_USE_LED        0
 
 #define LV_USE_LIST       1
 
@@ -554,7 +554,7 @@
 
 #define LV_USE_SPAN       1
 #if LV_USE_SPAN
-    /*A line text can contain maximum num of span descriptor */
+    /*一行文本可以包含最大长度的描述符 */
     #define LV_SPAN_SNIPPET_STACK_SIZE 64
 #endif
 
@@ -562,9 +562,9 @@
 
 #define LV_USE_SPINNER    1
 
-#define LV_USE_TABVIEW    1
+#define LV_USE_TABVIEW    0
 
-#define LV_USE_TILEVIEW   1
+#define LV_USE_TILEVIEW   0
 
 #define LV_USE_WIN        1
 
@@ -720,6 +720,7 @@
 #define LV_USE_MSG 0
 
 /*1: Enable Pinyin input method*/
+
 /*Requires: lv_keyboard*/
 #define LV_USE_IME_PINYIN 0
 #if LV_USE_IME_PINYIN

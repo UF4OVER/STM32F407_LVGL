@@ -86,8 +86,8 @@ void setup_ui(lv_ui *ui)
 {
     init_scr_del_flag(ui);
     init_keyboard(ui);
-    setup_scr_MAIN_PAGE(ui);
-    lv_scr_load(ui->MAIN_PAGE);
+    setup_scr_START_PAGE(ui);
+    lv_scr_load(ui->START_PAGE);
 }
 
 void init_keyboard(lv_ui *ui)

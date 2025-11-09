@@ -60,22 +60,7 @@ void ST7796_Set_Rotation(uint8_t Rotation);
 void ST7796_Enable(void);
 void ST7796_Init(void);
 void ST7796_Fill_Screen(uint16_t Colour);
-void ST7796_Draw_Colour(uint16_t Colour);
-void ST7796_Draw_Pixel(uint16_t X,uint16_t Y,uint16_t Colour);
-void ST7796_Draw_Colour_Burst(uint16_t Colour, uint32_t Size);
-void ST7796_Draw_Rectangle(uint16_t X, uint16_t Y, uint16_t Width, uint16_t Height, uint16_t Colour);
-void ST7796_Draw_Horizontal_Line(uint16_t X, uint16_t Y, uint16_t Width, uint16_t Colour);
-void ST7796_Draw_Vertical_Line(uint16_t X, uint16_t Y, uint16_t Height, uint16_t Colour);
-void LCD_Send_Data_DMA(uint16_t x, uint16_t y, uint16_t x_end, uint16_t y_end, uint8_t *p);
-void DMA_ST7796_Draw_Pixel(uint16_t X,uint16_t Y,uint16_t x_end, uint16_t y_end);
-void ST7796_Draw_Hollow_Circle(uint16_t X, uint16_t Y, uint16_t Radius, uint16_t Colour);
-void ST7796_Draw_Filled_Circle(uint16_t X, uint16_t Y, uint16_t Radius, uint16_t Colour);
-void ST7796_Draw_Hollow_Rectangle_Coord(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Colour);
-void ST7796_Draw_Filled_Rectangle_Coord(uint16_t X0, uint16_t Y0, uint16_t X1, uint16_t Y1, uint16_t Colour);
-void ST7796_Draw_Char(char Character, uint8_t X, uint8_t Y, uint16_t Colour, uint16_t Size, uint16_t Background_Colour);
-void ST7796_Draw_Text(const char* Text, uint8_t X, uint8_t Y, uint16_t Colour, uint16_t Size, uint16_t Background_Colour);
-void ST7796_Draw_Filled_Rectangle_Size_Text(uint16_t X0, uint16_t Y0, uint16_t Size_X, uint16_t Size_Y, uint16_t Colour);
-void ST7796_Draw_Image(const char* Image_Array, uint8_t Orientation);
+
 void ST7796_PushColors(uint16_t *pColors, uint32_t size);
 
 #endif

@@ -59,15 +59,14 @@ void lv_port_disp_init(void)
 
     disp_init();
 
-    static lv_disp_draw_buf_t draw_buf_dsc_2;
-    static lv_color_t buf_2_1[MY_DISP_HOR_RES * 10];                        /*A buffer for 10 rows*/
-    static lv_color_t buf_2_2[MY_DISP_HOR_RES * 10];                        /*An other buffer for 10 rows*/
-    lv_disp_draw_buf_init(&draw_buf_dsc_2, buf_2_1, buf_2_2, MY_DISP_HOR_RES * 10);   /*初始化显示缓冲区*/
+    __attribute__((section(".ccmram"))) static lv_disp_draw_buf_t draw_buf_dsc_2;
+    __attribute__((section(".ccmram"))) static lv_color_t buf_2_1[MY_DISP_HOR_RES * 30];                        /*A buffer for 30 rows (was 10)*/
+    __attribute__((section(".ccmram"))) static lv_color_t buf_2_2[MY_DISP_HOR_RES * 30];                        /*Another buffer for 30 rows*/
+    lv_disp_draw_buf_init(&draw_buf_dsc_2, buf_2_1, buf_2_2, MY_DISP_HOR_RES * 30);   /*初始化显示缓冲区*/
 
     static lv_disp_drv_t disp_drv;                         /*Descriptor of a display driver*/
     lv_disp_drv_init(&disp_drv);                    /*Basic initialization*/
 
-    /*Set up the functions to access to your display*/
 
     /*Set the resolution of the display*/
     disp_drv.hor_res = MY_DISP_HOR_RES;
@@ -79,15 +78,6 @@ void lv_port_disp_init(void)
     /*Set a display buffer*/
     disp_drv.draw_buf = &draw_buf_dsc_2;
 
-    /*Required for Example 3)*/
-    //disp_drv.full_refresh = 1;
-
-    /* 如果您有 GPU，请用颜色填充内存数组。
-     * 请注意，在 lv_conf.h 中，您可以启用在 LVGL 中具有内置支持的 GPU。
-     * 但是，如果你有不同的 GPU，则可以与此回调一起使用。*/
-    //disp_drv.gpu_fill_cb = gpu_fill;
-
-    /*Finally register the driver*/
     lv_disp_drv_register(&disp_drv);
 }
 
@@ -105,20 +95,15 @@ static void disp_init(void)
 volatile bool disp_flush_enabled = true;
 
 
-/* 当 LVGL 调用 disp_flush（） 时启用更新屏幕（刷新过程）
- */
 void disp_enable_update(void)
 {
     disp_flush_enabled = true;
 }
 
-/* 当 LVGL 调用 disp_flush（） 时禁用更新屏幕（刷新过程）
- */
 void disp_disable_update(void)
 {
     disp_flush_enabled = false;
 }
-
 
 static void disp_flush(lv_disp_drv_t * disp_drv, const lv_area_t * area, lv_color_t * color_p){
     uint16_t x1 = area->x1;
