@@ -31,7 +31,6 @@
 #include "lvgl.h"
 #include "lv_port_disp.h"
 #include "lv_port_indev.h"
-#include "lv_examples.h"
 #include "ui_init.h"
 
 /* USER CODE END Includes */
@@ -65,6 +64,8 @@ static void MX_NVIC_Init(void);
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
+/* USER CODE BEGIN 0 */
+
 /* USER CODE END 0 */
 
 /**

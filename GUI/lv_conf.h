@@ -596,10 +596,10 @@
  * Layouts
  *----------*/
 
-/*A layout similar to Flexbox in CSS.*/
+/*类似于CSS中的Flexbox布局.*/
 #define LV_USE_FLEX 1
 
-/*A layout similar to Grid in CSS.*/
+/*类似于CSS中的Grid布局.*/
 #define LV_USE_GRID 1
 
 /*---------------------
